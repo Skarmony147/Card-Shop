@@ -20,7 +20,14 @@ public class Stocks {
 	
 	
 	
-	//public void BuyStock (
+	public void BuyStock(String cardType, int amount){
+		if(cards.get(0).equals(cardType))
+			cardInven.set(0, cardInven.get(0) + amount);
+		
+		
+		 
+		
+	}
 	
 	
 	
