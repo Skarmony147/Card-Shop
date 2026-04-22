@@ -1,5 +1,8 @@
 import javax.swing.*; // Needed for swing graphics
 import java.awt.*; // Needed for FlowLayout
+import java.awt.event.*; // Needed for login button
+import java.io.*; // Needed for reading LoginList file
+import java.util.Scanner; // Needed for scanner
 
 /**
  * The is the login window meant to check a username and password with
@@ -15,6 +18,7 @@ public class LoginWindow extends JFrame {
 	private JButton loginButton; // Reference login button
 	private final int WIDTH = 250; // Window width
 	private final int HEIGHT = 140;// Window height
+	public String rank =""; // Rank of the current user
 	
 	/**
 	 * Constructor
@@ -65,6 +69,42 @@ public class LoginWindow extends JFrame {
 		panel.add(passTextField);
 		panel.add(loginButton);
 	}
-	//page 781 textbook
-	
+	/**
+	 * Action Listener for login button
+	 **/
+	private class LoginButtonListener implements ActionListener{
+	/**
+	 * The actionPerformed method executes when the user
+	 * clicks on the Calculate button.
+	 * @param e The event object.
+	 **/
+		public void actionPerformed(ActionEvent e){
+			try{
+				// Get LoginList file
+				File list = new File("LoginList.txt");
+				// Set scanner to file
+				Scanner inputFile = new Scanner(list);
+				// Sets line variable to first line of file
+				String line = inputFile.nextLine();
+				// Repeat checking lines until end of file
+				while(inputFile.hasNext()){
+					// Check if entered username is in list, then check 
+					// if password matches as well. If not, make 
+					// loginButton text say "Incorrect password" for a second
+					if(line.charAt(0) == 'U' && userTextField.getText().equals(line.substring(2,line.length()))){
+						System.out.println(line.substring(2,line.length()));
+						line = inputFile.nextLine();
+						if(line.charAt(0) == 'P' && passTextField.getText().equals(line.substring(2,line.length()))){
+							System.out.println(line.substring(2,line.length()));
+						}
+					}
+					// Sets line variable to next line in file
+					line = inputFile.nextLine();
+				}
+				inputFile.close();
+			}catch(Exception uh){
+				System.out.println("Error occurred in LoginWindow " + uh);
+			}
+		}
+	}
 }

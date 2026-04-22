@@ -1,0 +1,19 @@
+U Man
+P Mischief managed
+R Manager
+-
+U Clerker
+P MoneyTime
+R Employee
+-
+U Milanie
+P Eilrahc
+R Employee
+-
+U Driver
+P 300InSZ
+R Employee
+-
+U Newbert42
+P StarTrek4Life
+R Rookie
