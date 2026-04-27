@@ -9,7 +9,7 @@ import java.awt.event.*; // For event listeners
 public class MainProgram {
 	/**
 	 * Login window function where user enters username and password,
-	 * which uses the LoginWindow class for the different operatios.
+	 * which uses the LoginWindow class for the different operations.
 	 **/
 	private static String rank;
 	public static void login(){
@@ -79,7 +79,7 @@ public class MainProgram {
         menuWin.setLayout(new BorderLayout());
 		// Create panel with flow layout
         JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 7));
+        menuPanel.setLayout(new GridLayout(3,1));
 		// Create buttons for snake stocks and employee management
 		// depending on rank, and add them to panel
 		if(rank.equals("Manager")){
@@ -89,6 +89,24 @@ public class MainProgram {
 			menuPanel.add(snakeButton);
 			menuPanel.add(stockButton);
 			menuPanel.add(employButton);
+			snakeButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					menuWin.setState(Frame.ICONIFIED);
+					//snake();
+				}
+            });
+            stockButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					menuWin.setState(Frame.ICONIFIED);
+					//stock();
+				}
+            });
+            employButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					menuWin.setState(Frame.ICONIFIED);
+					//employ();
+				}
+            });
 		} else if (rank.equals("Employee")){
 			JButton snakeButton = new JButton("Snake");
 			JButton stockButton = new JButton("Stocks");
@@ -104,9 +122,24 @@ public class MainProgram {
         menuWin.setVisible(true);
 	}
     public static void main(String[] args) {
-		// For a minor extra, run this in the command terminal:
-		// java splash:FreedomTM.png MainProgram
-		// May or may not work
+		// For a minor extra, a splash screen!
+		// Had to look up how to do this
+		// Image made by Charlie
+		JWindow splash = new JWindow();
+		splash.setLayout(new BorderLayout());
+		splash.setSize(400, 250);
+		splash.setLocationRelativeTo(null);
+		splash.getContentPane().add(
+			new JLabel("", new ImageIcon("FreedomTM.png"), SwingConstants.CENTER));
+		splash.setVisible(true);
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		splash.setVisible(false);
+		splash.dispose();
+		
 		login(); // The beginning of it all
     }
 }
