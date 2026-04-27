@@ -11,7 +11,8 @@ public class MainProgram {
 	 * Login window function where user enters username and password,
 	 * which uses the LoginWindow class for the different operatios.
 	 **/
-	public static String login(){
+	private static String rank;
+	public static void login(){
 		// Create login window and properties
 		JFrame logWin = new JFrame("Login");
         logWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,6 +50,8 @@ public class MainProgram {
 						public void actionPerformed(ActionEvent evt) {
 							logWin.setState(Frame.ICONIFIED);
 							loginButton.setText("Login");
+							rank = log.getRank();
+							menu();
 							((javax.swing.Timer)evt.getSource()).stop();
 						}
 					}).start();
@@ -79,19 +82,19 @@ public class MainProgram {
         menuPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 7));
 		// Create buttons for snake stocks and employee management
 		// depending on rank, and add them to panel
-		if(log.rank.equals("Manager")){
+		if(rank.equals("Manager")){
 			JButton snakeButton = new JButton("Snake");
 			JButton stockButton = new JButton("Stocks");
 			JButton employButton = new JButton("Employees");
 			menuPanel.add(snakeButton);
 			menuPanel.add(stockButton);
 			menuPanel.add(employButton);
-		} else if (log.rank.equals("Employee")){
+		} else if (rank.equals("Employee")){
 			JButton snakeButton = new JButton("Snake");
 			JButton stockButton = new JButton("Stocks");
 			menuPanel.add(snakeButton);
 			menuPanel.add(stockButton);
-		} else if (log.rank.equals("Rookie")){
+		} else if (rank.equals("Rookie")){
 			JButton stockButton = new JButton("Stocks");
 			menuPanel.add(stockButton);
 		}
@@ -101,9 +104,9 @@ public class MainProgram {
         menuWin.setVisible(true);
 	}
     public static void main(String[] args) {
-		// For a minor extra, run java splash:FreedomTM.png MainProgram
-		// In the command terminal for this folder
-		String rank; // Current rank of user
+		// For a minor extra, run this in the command terminal:
+		// java splash:FreedomTM.png MainProgram
+		// May or may not work
 		login(); // The beginning of it all
     }
 }
