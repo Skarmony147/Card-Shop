@@ -39,4 +39,7 @@ public class LoginWindow {
         }
         return false;
     }
+    public String getRank(){
+        return(rank);
+    }
 }
