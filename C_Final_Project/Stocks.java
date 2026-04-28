@@ -1,10 +1,10 @@
-//This file will allow both managers and employees to access the stocks and to buy and sell based on clearance
+//This file will allow both managers and employees to access current inventory and to buy and sell items based on clearance
 import java.util.*;
 
 public class Stocks {
 	
 	private ArrayList<String> cards = new ArrayList<String>();	//This sets up the list which tells the current cards brands in stock
-	private ArrayList<Integer> cardInven = new ArrayList<Integer>();  //This will tell you how much stock you have of each brand in a brand
+	private ArrayList<Integer> cardInven = new ArrayList<Integer>();  //This will tell you how much stock you have of each brand
 	private Map<String, Integer> prices = new HashMap<String, Integer>(); //Provides a dictionary for each kind of card box that may be available.
 	
 	/**
@@ -69,7 +69,7 @@ public class Stocks {
 	/**
 	 * This method allows the user to view the prices of a certain kind of product regardless of brand
 	 * 
-	 * @param boxType Is needed for pulling the price from the prices map.
+	 * @param boxType is needed for pulling the price from the prices map.
 	 */
 	public int viewPrice(String boxType){
 		if(prices.get(boxType) == null)
@@ -77,8 +77,35 @@ public class Stocks {
 		else
 			return(prices.get(boxType));
 	}
+	/**
+	 * This method allows the user to sell the amount of stock they choose. If the stock is less than the amount that is requested, only available stock will be sold.
+	 * 
+	 * @param cardBrand is just the name of the brand you would like to sell
+	 * @param boxType is the specific item of that brand that is to be sold
+	 * @param amount is and integer amount of stock that is to be sold
+	 * 
+	 * @return is the amount of product that is sold to use in a reciept or something
+	 */
+	public int sellStock(String cardBrand, String boxType, int amount){
+		int brand = cards.indexOf(cardBrand);
+		boolean littleStock = amount > cardInven.get(brand);
+		if(amount <= 0){
+			System.out.println("Please input a number that is above zero");
+			return(-1);	//possibly can use this as a sentinal value too.
+		}
+		else if(littleStock){
+			System.out.println("We don't have the exact amount that you requested, but you can sell what is currently available.");
+			cardInven.set(brand, 0);
+			return(cardInven.get(brand));
+		}
+		else{
+			System.out.println("The amount requested is in stock and can be sold");
+			cardInven.set(brand, (cardInven.get(brand) - amount));
+			return(amount);
+		}
+	}
 	
 	public String toString(){
-		return("Currnt items in stock are:\n" + cards + "\nCurrent amounts are:\n" + cardInven + "\n");
+		return("Current items in stock are:\n" + cards + "\nCurrent amounts are:\n" + cardInven + "\n");
 	}
 }
