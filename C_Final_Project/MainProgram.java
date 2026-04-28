@@ -98,7 +98,7 @@ public class MainProgram {
             stockButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					menuWin.setState(Frame.ICONIFIED);
-					//stock();
+					stock();
 				}
             });
             employButton.addActionListener(new ActionListener() {
@@ -120,6 +120,36 @@ public class MainProgram {
         menuWin.add(menuPanel, BorderLayout.CENTER);
         menuWin.setLocationRelativeTo(null);
         menuWin.setVisible(true);
+	}
+	/**
+	 * Stock window function for buying and selling stock, 
+	 * viewing current prices, and current funds.
+	 **/
+	public static void stock(){
+		// Create stock window and properties
+		JFrame stockWin = new JFrame("Stocks");
+        stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        stockWin.setSize(600, 300);
+        stockWin.setLayout(new GridLayout(4,1));
+        // Create stock1 panel and create components
+        JPanel stock1Panel = new JPanel();
+        stock1Panel.setLayout(new GridLayout(1,5));
+        JLabel stock1NameLabel = new JLabel("Pokemon", SwingConstants.CENTER);
+        JLabel stock1PriceLabel = new JLabel();
+        JLabel stock1NumLabel = new JLabel();
+        JButton buy1Button = new JButton("Buy");
+        JButton sell1Button = new JButton("Sell");
+        // Add components to stock1 panel
+        stock1Panel.add(stock1NameLabel);
+        stock1Panel.add(stock1PriceLabel);
+        stock1Panel.add(stock1NumLabel);
+        stock1Panel.add(buy1Button);
+        stock1Panel.add(sell1Button);
+        
+        // Add stock panels to window and display window
+        stockWin.add(stock1Panel, BorderLayout.CENTER);
+        stockWin.setLocationRelativeTo(null);
+        stockWin.setVisible(true);
 	}
     public static void main(String[] args) {
 		// For a minor extra, a splash screen!
