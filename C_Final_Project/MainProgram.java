@@ -7,6 +7,11 @@ import java.awt.*; // For swing graphics
 import java.awt.event.*; // For event listeners
 import java.util.*; // For array lists
 
+//For splash screen
+import java.awt.image.*;
+import javax.sound.sampled.*;
+import java.io.*;
+
 public class MainProgram {
 	/**
 	 * Login window function where user enters username and password,
@@ -132,10 +137,11 @@ public class MainProgram {
 		// Create stock window and properties
 		JFrame stockWin = new JFrame("Stocks");
         stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        stockWin.setSize(600, 300);
+        stockWin.setSize(400, 200);
         stockWin.setLayout(new GridLayout(4,1));
         // Create list of stocks for iteration creation of panels and such
         ArrayList<String> stockNames = new ArrayList<String>(inventory.viewBrands());
+        ArrayList<Integer> stocks = new ArrayList<Integer>(inventory.viewStocks());
         ArrayList<String> boxes = new ArrayList<String>();
         boxes.add("ETB");
         boxes.add("Booster bundle");
@@ -144,18 +150,24 @@ public class MainProgram {
         // Iterate through stockNames making panel and componentes for each stock
         for (int i = 0; i < stockNames.size(); i++) {
             // Create panel and components
+            String name = stockNames.get(i);
+            String box = boxes.get(i);
             JPanel stockPanel = new JPanel(new GridLayout(1, 5));
-            JLabel nameLabel = new JLabel(stockNames.get(i));
-            JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice(boxes.get(i)))); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
-            JLabel numLabel = new JLabel(stockNames.get(i)); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+            JLabel nameLabel = new JLabel(stockNames.get(i), SwingConstants.CENTER);
+            JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice(boxes.get(i))), SwingConstants.CENTER);
+            JLabel numLabel = new JLabel(Integer.toString(stocks.get(i)), SwingConstants.CENTER);
             JButton buyButton = new JButton("Buy");
             JButton sellButton = new JButton("Sell");
             // Add action listeners for buy/sell buttons
-            buyButton.addActionListener(e -> {
-                inventory.buyStock(stockNames.get(i),1); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+            buyButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					inventory.buyStock(name,1);
+				}
             });
-            sellButton.addActionListener(e -> {
-                inventory.sellStock(stockNames.get(i),boxes.get(i),1); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+            sellButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					inventory.sellStock(name,box,1);
+				}
             });
             // Add stuff to panel
             stockPanel.add(nameLabel);
@@ -171,25 +183,103 @@ public class MainProgram {
         stockWin.setLocationRelativeTo(null);
         stockWin.setVisible(true);
 	}
+
+	/**
+	 * This function shows a splash screen with the logo and sound taken from the HD2 RPG project
+	 * This was a pain, but it works so hurrah
+	 * Way, way too much code I had to look up, best considered copied entirely from various sources
+	 * 
+	 */
+	public static void showSplashScreen() {
+		int SCREEN_WIDTH = 400;
+		int SCREEN_HEIGHT = 250;
+		int DURATION = 4700; // ms
+		String IMAGE_PATH = "FreedomTM.png";
+		String SOUND_PATH = "Logo.wav";
+
+		JWindow splash = new JWindow();
+		splash.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+		splash.setLocationRelativeTo(null);
+
+		// Load image
+		ImageIcon icon = new ImageIcon(IMAGE_PATH);
+		Image logo = icon.getImage();
+
+		// Play sound
+		try {
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(SOUND_PATH));
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioIn);
+			clip.start();
+		} catch (Exception e) {
+			System.out.println("Sound error: " + e);
+		}
+
+		// Custom panel for animation
+		JPanel panel = new JPanel() {
+			long start = System.currentTimeMillis();
+			@Override // I have no idea what this does but if I delete it the code is unhappy
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				long elapsed = System.currentTimeMillis() - start;
+				float progress = Math.min(elapsed / (float)DURATION, 1.0f);
+
+				// Zoom effect
+				double zoom = 0.9 + (progress * 0.12);
+				int w = (int)(SCREEN_WIDTH * zoom);
+				int h = (int)(SCREEN_HEIGHT * zoom);
+
+				// Brighten effect
+				float brightness = 0.5f + (progress * 0.4f);
+
+				// Draw scaled image
+				BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2 = scaled.createGraphics();
+				g2.drawImage(logo, 0, 0, w, h, null);
+
+				// Brighten (overlay white with alpha)
+				int alpha = (int)(255 * (1 - brightness));
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha / 255f));
+				g2.setColor(Color.WHITE);
+				g2.fillRect(0, 0, w, h);
+				g2.dispose();
+
+				// Center image
+				int x = (SCREEN_WIDTH - w) / 2;
+				int y = (SCREEN_HEIGHT - h) / 2;
+				g.drawImage(scaled, x, y, null);
+			}
+		};
+		splash.add(panel);
+		splash.setVisible(true);
+
+		// Animation timer
+		javax.swing.Timer splashDown = new javax.swing.Timer(1000 / 60, null); // 60 FPS
+		splashDown.addActionListener(new ActionListener() {
+			long start = System.currentTimeMillis();
+			public void actionPerformed(ActionEvent e) {
+				panel.repaint();
+				if (System.currentTimeMillis() - start > DURATION) {
+					splashDown.stop();
+					splash.setVisible(false);
+					splash.dispose();
+				}
+			}
+		});
+		splashDown.start();
+
+		// Wait for animation to finish
+		try {
+			Thread.sleep(DURATION + 100);
+		} catch (InterruptedException ex) {}
+	}
+
     public static void main(String[] args) {
 		// For a minor extra, a splash screen!
 		// Had to look up how to do this
-		// Image from the Helldivers 2 rpg project
-		JFrame splash = new JFrame();
-		splash.setLayout(new BorderLayout());
-		splash.setSize(400, 250);
-		splash.setLocationRelativeTo(null);
-		splash.add(
-			new JLabel("", new ImageIcon("FreedomTM.png"), SwingConstants.CENTER));
-		splash.setVisible(true);
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			System.out.println(e);
-		}
-		splash.setVisible(false);
-		splash.dispose();
-		
+		// Image and from the Helldivers 2 rpg project
+		showSplashScreen(); // this was a pain
+
 		login(); // The beginning of it all
     }
 }
