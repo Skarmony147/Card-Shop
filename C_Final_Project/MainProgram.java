@@ -5,6 +5,7 @@
 import javax.swing.*; // For swing graphics
 import java.awt.*; // For swing graphics
 import java.awt.event.*; // For event listeners
+import java.util.*; // For array lists
 
 public class MainProgram {
 	/**
@@ -128,29 +129,33 @@ public class MainProgram {
 	public static void stock(){
 	    // Create stocks object for references
 	    Stocks inventory = new Stocks();
-	    
 		// Create stock window and properties
 		JFrame stockWin = new JFrame("Stocks");
         stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         stockWin.setSize(600, 300);
         stockWin.setLayout(new GridLayout(4,1));
         // Create list of stocks for iteration creation of panels and such
-        String[] stockNames = { "Pokemon", "Digimon", "Mario", "Zelda" };
-        // Iterate through stockNames makign panel and componentes for each stock
-        for (int i = 0; i < stockNames.length; i++) {
-            // Create panel and compnents
+        ArrayList<String> stockNames = new ArrayList<String>(inventory.viewBrands());
+        ArrayList<String> boxes = new ArrayList<String>();
+        boxes.add("ETB");
+        boxes.add("Booster bundle");
+        boxes.add("Booster box");
+        boxes.add("UPC");
+        // Iterate through stockNames making panel and componentes for each stock
+        for (int i = 0; i < stockNames.size(); i++) {
+            // Create panel and components
             JPanel stockPanel = new JPanel(new GridLayout(1, 5));
-            JLabel nameLabel = new JLabel(stockNames[i], SwingConstants.CENTER);
-            JLabel priceLabel = new JLabel(inventory.viewPrice()); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
-            JLabel numLabel = new JLabel(inventory.viewStock()); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+            JLabel nameLabel = new JLabel(stockNames.get(i));
+            JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice(boxes.get(i)))); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+            JLabel numLabel = new JLabel(stockNames.get(i)); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
             JButton buyButton = new JButton("Buy");
             JButton sellButton = new JButton("Sell");
             // Add action listeners for buy/sell buttons
             buyButton.addActionListener(e -> {
-                inventory.BuyStock(); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+                inventory.buyStock(stockNames.get(i),1); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
             });
             sellButton.addActionListener(e -> {
-                inventory.sellStock(); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+                inventory.sellStock(stockNames.get(i),boxes.get(i),1); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
             });
             // Add stuff to panel
             stockPanel.add(nameLabel);
@@ -170,7 +175,7 @@ public class MainProgram {
 		// For a minor extra, a splash screen!
 		// Had to look up how to do this
 		// Image from the Helldivers 2 rpg project
-		JFrame splash = new JFrame("Loading...");
+		JFrame splash = new JFrame();
 		splash.setLayout(new BorderLayout());
 		splash.setSize(400, 250);
 		splash.setLocationRelativeTo(null);
