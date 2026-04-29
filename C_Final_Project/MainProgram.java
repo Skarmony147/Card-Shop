@@ -126,46 +126,61 @@ public class MainProgram {
 	 * viewing current prices, and current funds.
 	 **/
 	public static void stock(){
+	    // Create stocks object for references
+	    Stocks inventory = new Stocks();
+	    
 		// Create stock window and properties
 		JFrame stockWin = new JFrame("Stocks");
         stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         stockWin.setSize(600, 300);
         stockWin.setLayout(new GridLayout(4,1));
-        // Create stock1 panel and create components
-        JPanel stock1Panel = new JPanel();
-        stock1Panel.setLayout(new GridLayout(1,5));
-        JLabel stock1NameLabel = new JLabel("Pokemon", SwingConstants.CENTER);
-        JLabel stock1PriceLabel = new JLabel();
-        JLabel stock1NumLabel = new JLabel();
-        JButton buy1Button = new JButton("Buy");
-        JButton sell1Button = new JButton("Sell");
-        // Add components to stock1 panel
-        stock1Panel.add(stock1NameLabel);
-        stock1Panel.add(stock1PriceLabel);
-        stock1Panel.add(stock1NumLabel);
-        stock1Panel.add(buy1Button);
-        stock1Panel.add(sell1Button);
+        // Create list of stocks for iteration creation of panels and such
+        String[] stockNames = { "Pokemon", "Digimon", "Mario", "Zelda" };
+        // Iterate through stockNames makign panel and componentes for each stock
+        for (int i = 0; i < stockNames.length; i++) {
+            // Create panel and compnents
+            JPanel stockPanel = new JPanel(new GridLayout(1, 5));
+            JLabel nameLabel = new JLabel(stockNames[i], SwingConstants.CENTER);
+            JLabel priceLabel = new JLabel(inventory.viewPrice()); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+            JLabel numLabel = new JLabel(inventory.viewStock()); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+            JButton buyButton = new JButton("Buy");
+            JButton sellButton = new JButton("Sell");
+            // Add action listeners for buy/sell buttons
+            buyButton.addActionListener(e -> {
+                inventory.BuyStock(); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+            });
+            sellButton.addActionListener(e -> {
+                inventory.sellStock(); // CHANGE THESE FOR ACTUAL LOGIC IN CLASS <---------
+            });
+            // Add stuff to panel
+            stockPanel.add(nameLabel);
+            stockPanel.add(priceLabel);
+            stockPanel.add(numLabel);
+            stockPanel.add(buyButton);
+            stockPanel.add(sellButton);
+            // Add panel to window
+            stockWin.add(stockPanel, BorderLayout.CENTER);
+        }
         
-        // Add stock panels to window and display window
-        stockWin.add(stock1Panel, BorderLayout.CENTER);
+        // Display window
         stockWin.setLocationRelativeTo(null);
         stockWin.setVisible(true);
 	}
     public static void main(String[] args) {
 		// For a minor extra, a splash screen!
 		// Had to look up how to do this
-		// Image made by Charlie
-		JWindow splash = new JWindow();
+		// Image from the Helldivers 2 rpg project
+		JFrame splash = new JFrame("Loading...");
 		splash.setLayout(new BorderLayout());
 		splash.setSize(400, 250);
 		splash.setLocationRelativeTo(null);
-		splash.getContentPane().add(
+		splash.add(
 			new JLabel("", new ImageIcon("FreedomTM.png"), SwingConstants.CENTER));
 		splash.setVisible(true);
 		try {
-			Thread.sleep(4000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		splash.setVisible(false);
 		splash.dispose();
