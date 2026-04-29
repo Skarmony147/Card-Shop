@@ -78,6 +78,15 @@ public class Stocks {
 			return(prices.get(boxType));
 	}
 	/**
+	 * This method only returns the brands in your store.
+	 * 
+	 * @return returns all card brands that you currently have in your store.
+	 */
+	public ArrayList viewBrands(){
+		return(cards);
+	}
+	
+	/**
 	 * This method allows the user to sell the amount of stock they choose. If the stock is less than the amount that is requested, only available stock will be sold.
 	 * 
 	 * @param cardBrand is just the name of the brand you would like to sell
