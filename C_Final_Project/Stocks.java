@@ -35,7 +35,7 @@ public class Stocks {
 	 * 
 	 * @param amount stores how much of that specific card brand you want to buy stock for.
 	 */
-	public void BuyStock(String cardType, int amount){
+	public void buyStock(String cardType, int amount){
 		if(cards.get(0).equals(cardType))
 			cardInven.set(0, cardInven.get(0) + amount);
 		else if(cards.get(1).equals(cardType))
@@ -52,7 +52,7 @@ public class Stocks {
 	 * 
 	 * @param cardType takes in a string to find the current stock
 	 */	
-	public int ViewStock(String cardType){
+	public int viewStock(String cardType){
 		if(cards.get(0).equals(cardType))
 			return(cardInven.get(0));
 		else if(cards.get(1).equals(cardType))
