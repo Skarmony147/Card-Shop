@@ -35,7 +35,7 @@ public class Stocks {
 	 * 
 	 * @param amount stores how much of that specific card brand you want to buy stock for.
 	 */
-	public void buyStock(String cardType, int amount){
+	public void BuyStock(String cardType, int amount){
 		if(cards.get(0).equals(cardType))
 			cardInven.set(0, cardInven.get(0) + amount);
 		else if(cards.get(1).equals(cardType))
@@ -52,7 +52,7 @@ public class Stocks {
 	 * 
 	 * @param cardType takes in a string to find the current stock
 	 */	
-	public int viewStock(String cardType){
+	public int ViewStock(String cardType){
 		if(cards.get(0).equals(cardType))
 			return(cardInven.get(0));
 		else if(cards.get(1).equals(cardType))
@@ -72,10 +72,12 @@ public class Stocks {
 	 * @param boxType is needed for pulling the price from the prices map.
 	 */
 	public int viewPrice(String boxType){
-		if(prices.get(boxType) == null)
+		if(prices.get(boxType) == null){
 			return(-1);	//This could also be used with a sentinal value aswell. 
-		else
+		}
+		else{
 			return(prices.get(boxType));
+		}
 	}
 	/**
 	 * This method only returns the brands in your store.
@@ -97,15 +99,16 @@ public class Stocks {
 	 */
 	public int sellStock(String cardBrand, String boxType, int amount){
 		int brand = cards.indexOf(cardBrand);
+		int currentAmount = cardInven.get(brand); 
 		boolean littleStock = amount > cardInven.get(brand);
-		if(amount <= 0){
-			System.out.println("Please input a number that is above zero");
+		if(amount <= 0 || brand == -1){
+			System.out.println("Please input a number that is above zero and ensure your brand name is correct.");
 			return(-1);	//possibly can use this as a sentinal value too.
 		}
 		else if(littleStock){
 			System.out.println("We don't have the exact amount that you requested, but you can sell what is currently available.");
 			cardInven.set(brand, 0);
-			return(cardInven.get(brand));
+			return(currentAmount);
 		}
 		else{
 			System.out.println("The amount requested is in stock and can be sold");
