@@ -13,175 +13,237 @@ import javax.sound.sampled.*;
 import java.io.*;
 
 public class MainProgram {
+	// private variables as needed
+	private static String rank; // Rank of the user
+	
+	private static JFrame logWin = null; // Jframe object for login window checker
+	private static boolean loginWinMade = false; // bool variable for login window checker
+	
+	private static JFrame menuWin = null; // Jframe object for menu window checker
+	private static boolean menuWinMade = false; // bool variable for menu window checker
+	
+	private static JFrame stockWin = null; // Jframe object for stock window checker
+	private static boolean stockWinMade = false; // bool variable for stock window checker
+	
+	private static JFrame snakeWin = null; // Jframe object for snake window checker
+	private static boolean snakeWinMade = false; // bool variable for snake window checker
+	
+	
 	/**
 	 * Login window function where user enters username and password,
 	 * which uses the LoginWindow class for the different operations.
 	 **/
-	private static String rank;
 	public static void login(){
-		// Create login window and properties
-		JFrame logWin = new JFrame("Login");
-        logWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        logWin.setSize(250, 140);
-        logWin.setLayout(new BorderLayout());
-		// Create panel with flow layout
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 7));
-		// Create labels, text fields, and button for username and password
-        JLabel userLabel = new JLabel("Username");
-        JTextField userTextField = new JTextField(10);
-        JLabel passLabel = new JLabel("Password");
-        JTextField passTextField = new JTextField(10);
-        JButton loginButton = new JButton("Login");
-		// Add components to the panel
-        panel.add(userLabel);
-        panel.add(userTextField);
-        panel.add(passLabel);
-        panel.add(passTextField);
-        panel.add(loginButton);
-		// Add panel to login window, center window, display window
-        logWin.add(panel, BorderLayout.CENTER);
-        logWin.setLocationRelativeTo(null);
-        logWin.setVisible(true);
-		// Create LoginWindow object to perform operations for login window
-        LoginWindow log = new LoginWindow();
-        loginButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String username = userTextField.getText();
-                String password = passTextField.getText();
-                if (log.authenticate(username, password)) {
-					loginButton.setText("Success");
-					// Use a timer for the delay, had to look this up
-					new javax.swing.Timer(1000, new ActionListener() {
-						public void actionPerformed(ActionEvent evt) {
-							logWin.setState(Frame.ICONIFIED);
-							loginButton.setText("Login");
-							rank = log.getRank();
-							menu();
-							((javax.swing.Timer)evt.getSource()).stop();
-						}
-					}).start();
-				} else {
-					loginButton.setText("Invalid");
-					new javax.swing.Timer(1000, new ActionListener() {
-						public void actionPerformed(ActionEvent evt) {
-							loginButton.setText("Login");
-							((javax.swing.Timer)evt.getSource()).stop();
-						}
-					}).start();
+		// if window is already made, unminimize it
+		if(loginWinMade){
+			logWin.setExtendedState(JFrame.NORMAL);
+		}else{
+			// Create login window and properties
+			JFrame logWin = new JFrame("Login");
+			loginWinMade = true;
+			logWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			logWin.setSize(250, 140);
+			logWin.setLayout(new BorderLayout());
+			// Create panel with flow layout
+			JPanel panel = new JPanel();
+			panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 7));
+			// Create labels, text fields, and button for username and password
+			JLabel userLabel = new JLabel("Username");
+			JTextField userTextField = new JTextField(10);
+			JLabel passLabel = new JLabel("Password");
+			JTextField passTextField = new JTextField(10);
+			JButton loginButton = new JButton("Login");
+			// Add components to the panel
+			panel.add(userLabel);
+			panel.add(userTextField);
+			panel.add(passLabel);
+			panel.add(passTextField);
+			panel.add(loginButton);
+			// Add panel to login window, center window, display window
+			logWin.add(panel, BorderLayout.CENTER);
+			logWin.setLocationRelativeTo(null);
+			logWin.setVisible(true);
+			// Create LoginWindow object to perform operations for login window
+			LoginWindow log = new LoginWindow();
+			loginButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String username = userTextField.getText();
+					String password = passTextField.getText();
+					if (log.authenticate(username, password)) {
+						loginButton.setText("Success");
+						// Use a timer for the delay, had to look this up
+						new javax.swing.Timer(1000, new ActionListener() {
+							public void actionPerformed(ActionEvent evt) {
+								logWin.setState(Frame.ICONIFIED);
+								loginButton.setText("Login");
+								rank = log.getRank();
+								passTextField.setText("");
+								userTextField.setText("");
+								menu();
+								((javax.swing.Timer)evt.getSource()).stop();
+							}
+						}).start();
+					} else {
+						loginButton.setText("Invalid");
+						new javax.swing.Timer(1000, new ActionListener() {
+							public void actionPerformed(ActionEvent evt) {
+								loginButton.setText("Login");
+								((javax.swing.Timer)evt.getSource()).stop();
+							}
+						}).start();
+					}
 				}
-            }
-        });
+			});
+		}
 	}
+	
 	/**
 	 * Menu window function for moving to the different screens
 	 * of snake, stocks, and employees depending on the rank of the user.
 	 **/
 	public static void menu(){
-		// Create menu window and properties
-		JFrame menuWin = new JFrame("Menu");
-        menuWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        menuWin.setSize(180, 200);
-        menuWin.setLayout(new BorderLayout());
-		// Create panel with flow layout
-        JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new GridLayout(3,1));
-		// Create buttons for snake stocks and employee management
-		// depending on rank, and add them to panel
-		if(rank.equals("Manager")){
-			JButton snakeButton = new JButton("Snake");
-			JButton stockButton = new JButton("Stocks");
-			JButton employButton = new JButton("Employees");
-			menuPanel.add(snakeButton);
-			menuPanel.add(stockButton);
-			menuPanel.add(employButton);
-			snakeButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					menuWin.setState(Frame.ICONIFIED);
-					//snake();
-				}
-            });
-            stockButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					menuWin.setState(Frame.ICONIFIED);
-					stock();
-				}
-            });
-            employButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					menuWin.setState(Frame.ICONIFIED);
-					//employ();
-				}
-            });
-		} else if (rank.equals("Employee")){
-			JButton snakeButton = new JButton("Snake");
-			JButton stockButton = new JButton("Stocks");
-			menuPanel.add(snakeButton);
-			menuPanel.add(stockButton);
-		} else if (rank.equals("Rookie")){
-			JButton stockButton = new JButton("Stocks");
-			menuPanel.add(stockButton);
+		// if window is already made, unminimize it
+		if(menuWinMade){
+			menuWin.setExtendedState(JFrame.NORMAL);
+		}else{
+			// Create menu window and properties
+			JFrame menuWin = new JFrame("Menu");
+			menuWinMade = true;
+			menuWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			menuWin.setSize(180, 200);
+			menuWin.setLayout(new BorderLayout());
+			// Create panel with flow layout
+			JPanel menuPanel = new JPanel();
+			menuPanel.setLayout(new GridLayout(3,1));
+			// Create buttons for snake stocks and employee management
+			// depending on rank, and add them to panel
+			if(rank.equals("Manager")){
+				JButton snakeButton = new JButton("Snake");
+				JButton stockButton = new JButton("Stocks");
+				JButton employButton = new JButton("Employees");
+				menuPanel.add(snakeButton);
+				menuPanel.add(stockButton);
+				menuPanel.add(employButton);
+				snakeButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						menuWin.setState(Frame.ICONIFIED);
+						snake();
+					}
+				});
+				stockButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						menuWin.setState(Frame.ICONIFIED);
+						stock();
+					}
+				});
+				employButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						menuWin.setState(Frame.ICONIFIED);
+						//employ();
+					}
+				});
+			} else if (rank.equals("Employee")){
+				JButton snakeButton = new JButton("Snake");
+				JButton stockButton = new JButton("Stocks");
+				menuPanel.add(snakeButton);
+				menuPanel.add(stockButton);
+			} else if (rank.equals("Rookie")){
+				JButton stockButton = new JButton("Stocks");
+				menuPanel.add(stockButton);
+			}
+			// Add panel to login window, center window, display window
+			menuWin.add(menuPanel, BorderLayout.CENTER);
+			menuWin.setLocationRelativeTo(null);
+			menuWin.setVisible(true);
 		}
-		// Add panel to login window, center window, display window
-        menuWin.add(menuPanel, BorderLayout.CENTER);
-        menuWin.setLocationRelativeTo(null);
-        menuWin.setVisible(true);
 	}
+	
 	/**
 	 * Stock window function for buying and selling stock, 
 	 * viewing current prices, and current funds.
 	 **/
 	public static void stock(){
-	    // Create stocks object for references
-	    Stocks inventory = new Stocks();
-		// Create stock window and properties
-		JFrame stockWin = new JFrame("Stocks");
-        stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        stockWin.setSize(400, 200);
-        stockWin.setLayout(new GridLayout(4,1));
-        // Create list of stocks for iteration creation of panels and such
-        ArrayList<String> stockNames = new ArrayList<String>(inventory.viewBrands());
-        ArrayList<Integer> stocks = new ArrayList<Integer>(inventory.viewStocks());
-        ArrayList<String> boxes = new ArrayList<String>();
-        boxes.add("ETB");
-        boxes.add("Booster bundle");
-        boxes.add("Booster box");
-        boxes.add("UPC");
-        // Iterate through stockNames making panel and componentes for each stock
-        for (int i = 0; i < stockNames.size(); i++) {
-            // Create panel and components
-            String name = stockNames.get(i);
-            String box = boxes.get(i);
-            JPanel stockPanel = new JPanel(new GridLayout(1, 5));
-            JLabel nameLabel = new JLabel(stockNames.get(i), SwingConstants.CENTER);
-            JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice(boxes.get(i))), SwingConstants.CENTER);
-            JLabel numLabel = new JLabel(Integer.toString(stocks.get(i)), SwingConstants.CENTER);
-            JButton buyButton = new JButton("Buy");
-            JButton sellButton = new JButton("Sell");
-            // Add action listeners for buy/sell buttons
-            buyButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					inventory.buyStock(name,1);
-				}
-            });
-            sellButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					inventory.sellStock(name,box,1);
-				}
-            });
-            // Add stuff to panel
-            stockPanel.add(nameLabel);
-            stockPanel.add(priceLabel);
-            stockPanel.add(numLabel);
-            stockPanel.add(buyButton);
-            stockPanel.add(sellButton);
-            // Add panel to window
-            stockWin.add(stockPanel, BorderLayout.CENTER);
-        }
-        
-        // Display window
-        stockWin.setLocationRelativeTo(null);
-        stockWin.setVisible(true);
+		// if window is already made, unminimize it
+		if(stockWinMade){
+			stockWin.setExtendedState(JFrame.NORMAL);
+		}else{
+			// Create stocks object for references
+			Stocks inventory = new Stocks();
+			// Create stock window and properties
+			JFrame stockWin = new JFrame("Stocks");
+			stockWinMade = true;
+			stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			stockWin.setSize(400, 200);
+			stockWin.setLayout(new GridLayout(4,1));
+			// Create list of stocks for iteration creation of panels and such
+			ArrayList<String> stockNames = new ArrayList<String>(inventory.viewBrands());
+			ArrayList<Integer> stocks = new ArrayList<Integer>(inventory.viewStocks());
+			ArrayList<String> boxes = new ArrayList<String>();
+			boxes.add("ETB");
+			boxes.add("Booster bundle");
+			boxes.add("Booster box");
+			boxes.add("UPC");
+			// Iterate through stockNames making panel and componentes for each stock
+			for (int i = 0; i < stockNames.size(); i++) {
+				// Create panel and components
+				String name = stockNames.get(i);
+				String box = boxes.get(i);
+				JPanel stockPanel = new JPanel(new GridLayout(1, 5));
+				JLabel nameLabel = new JLabel(stockNames.get(i), SwingConstants.CENTER);
+				JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice(boxes.get(i))), SwingConstants.CENTER);
+				JLabel numLabel = new JLabel(Integer.toString(stocks.get(i)), SwingConstants.CENTER);
+				JButton buyButton = new JButton("Buy");
+				JButton sellButton = new JButton("Sell");
+				// Add action listeners for buy/sell buttons
+				buyButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						inventory.buyStock(name,1);
+					}
+				});
+				sellButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						inventory.sellStock(name,box,1);
+					}
+				});
+				// Add stuff to panel
+				stockPanel.add(nameLabel);
+				stockPanel.add(priceLabel);
+				stockPanel.add(numLabel);
+				stockPanel.add(buyButton);
+				stockPanel.add(sellButton);
+				// Add panel to window
+				stockWin.add(stockPanel, BorderLayout.CENTER);
+			}
+			
+			// Display window
+			stockWin.setLocationRelativeTo(null);
+			stockWin.setVisible(true);
+		}
+	}
+	
+	/**
+	 * Snake window function for snake game
+	 **/
+	public static void snake(){
+		// if window is already made, unminimize it
+		if(snakeWinMade){
+			snakeWin.setExtendedState(JFrame.NORMAL);
+		}else{
+			// Create snake object for background stuff
+			
+			// Create snake window and properties
+			JFrame snakeWin = new JFrame("Snake");
+			snakeWinMade = true;
+			snakeWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			snakeWin.setSize(600, 300);
+			snakeWin.setLayout(new BorderLayout());
+			
+			
+			
+			// Display window
+			snakeWin.setLocationRelativeTo(null);
+			snakeWin.setVisible(true);
+		}
 	}
 
 	/**
@@ -223,15 +285,16 @@ public class MainProgram {
 	
 	        @Override
 	        // Okay so this part is a bit confusing but if I understand it correctly, 
-			// override tells Java we are "replacing" JPanel's colors and tranparency method
+			// override tells java we are "replacing" JPanel's colors and tranparency method
 			// so because normally that would result in errors, we override it to say
-			// "hey don't worry about this" to java. the protected part tells everything else that it's normal
+			// "hey don't worry about this" to java. 
+			// The protected and super tells everything else that it's normal
 	        protected void paintComponent(Graphics g) {
 	            super.paintComponent(g);
 	
 	            // How long the animation has been running
 	            long elapsed = System.currentTimeMillis() - start;
-	            float progress = Math.min(elapsed / (float) DURATION, 1.0f);
+	            double progress = Math.min(elapsed / (double) DURATION, 1.0);
 	
 	            // Zoom animation
 	            double zoom = 0.9 + (progress * 0.12);
@@ -239,7 +302,7 @@ public class MainProgram {
 	            int h = (int)(SCREEN_HEIGHT * zoom);
 	
 	            // Brightness animation 
-	            float brightness = 0.5f + (progress * 0.4f);
+	            double brightness = 0.5 + (progress * 0.4);
 	
 	            // Scale image
 	            BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
@@ -247,9 +310,9 @@ public class MainProgram {
 	            g2.drawImage(logo, 0, 0, w, h, null);
 	
 	            // Apply brightness
-	            int alpha = (int)(255 * (1 - brightness));
+	            int alpha = (int)(255.0 * (1.0 - brightness));
 	            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha / 255f));
-	            g2.setColor(Color.WHITE);
+	            g2.setColor(Color.BLACK);
 	            g2.fillRect(0, 0, w, h);
 	            g2.dispose();
 	
