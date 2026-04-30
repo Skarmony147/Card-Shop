@@ -78,7 +78,7 @@ public class Stocks {
 			return(prices.get(boxType));
 	}
 	/**
-	 * This method only returns the brands in your store.
+	 * This method only returns the brands in your store as an ArrayList.
 	 * 
 	 * @return returns all card brands that you currently have in your store.
 	 */
@@ -88,7 +88,7 @@ public class Stocks {
 	/**
 	 * This method returns the stock of each item in your store as an arraylist.
 	 * 
-	 * @return returns all stocks that you currently have in your store.
+	 * @return returns all amounts that you currently have in your store.
 	 */
 	public ArrayList viewStocks(){
 		return(cardInven);
