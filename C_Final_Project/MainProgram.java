@@ -191,91 +191,106 @@ public class MainProgram {
 	 * 
 	 */
 	public static void showSplashScreen() {
-		int SCREEN_WIDTH = 400;
-		int SCREEN_HEIGHT = 250;
-		int DURATION = 4700; // ms
-		String IMAGE_PATH = "FreedomTM.png";
-		String SOUND_PATH = "Logo.wav";
+	    // Basic splash screen settings
+	    int SCREEN_WIDTH = 400;
+	    int SCREEN_HEIGHT = 250;
+	    int DURATION = 4700; // milliseconds
+	    String IMAGE_PATH = "FreedomTM.png";
+	    String SOUND_PATH = "Logo.wav";
+	
+	    // Create splash window
+	    JWindow splash = new JWindow();
+	    splash.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	    splash.setLocationRelativeTo(null);
+	
+	    // Load the logo image
+	    ImageIcon icon = new ImageIcon(IMAGE_PATH);
+	    Image logo = icon.getImage();
+	
+	    // Play the startup sound
+	    try {
+	        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(SOUND_PATH));
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(audioIn);
+	        clip.start();
+	    } catch (Exception e) {
+	        System.out.println("Sound error: " + e);
+	    }
+	
+	    // Panel that draws the image
+	    JPanel panel = new JPanel() {
+	        long start = System.currentTimeMillis();
+	
+	        @Override
+	        // Okay so this part is a bit confusing but if I understand it correctly, 
+			// override tells Java we are "replacing" JPanel's colors and tranparency method
+			// so because normally that would result in errors, we override it to say
+			// "hey don't worry about this" to java. the protected part tells everything else that it's normal
+	        protected void paintComponent(Graphics g) {
+	            super.paintComponent(g);
+	
+	            // How long the animation has been running
+	            long elapsed = System.currentTimeMillis() - start;
+	            float progress = Math.min(elapsed / (float) DURATION, 1.0f);
+	
+	            // Zoom animation
+	            double zoom = 0.9 + (progress * 0.12);
+	            int w = (int)(SCREEN_WIDTH * zoom);
+	            int h = (int)(SCREEN_HEIGHT * zoom);
+	
+	            // Brightness animation 
+	            float brightness = 0.5f + (progress * 0.4f);
+	
+	            // Scale image
+	            BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+	            Graphics2D g2 = scaled.createGraphics();
+	            g2.drawImage(logo, 0, 0, w, h, null);
+	
+	            // Apply brightness
+	            int alpha = (int)(255 * (1 - brightness));
+	            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha / 255f));
+	            g2.setColor(Color.WHITE);
+	            g2.fillRect(0, 0, w, h);
+	            g2.dispose();
+	
+	            // Draw image centered on image panel
+	            int x = (SCREEN_WIDTH - w) / 2;
+	            int y = (SCREEN_HEIGHT - h) / 2;
+	            g.drawImage(scaled, x, y, null);
+	        }
+	    };
 
-		JWindow splash = new JWindow();
-		splash.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-		splash.setLocationRelativeTo(null);
-
-		// Load image
-		ImageIcon icon = new ImageIcon(IMAGE_PATH);
-		Image logo = icon.getImage();
-
-		// Play sound
-		try {
-			AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(SOUND_PATH));
-			Clip clip = AudioSystem.getClip();
-			clip.open(audioIn);
-			clip.start();
-		} catch (Exception e) {
-			System.out.println("Sound error: " + e);
-		}
-
-		// Custom panel for animation
-		JPanel panel = new JPanel() {
-			long start = System.currentTimeMillis();
-			@Override // I have no idea what this does but if I delete it the code is unhappy
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				long elapsed = System.currentTimeMillis() - start;
-				float progress = Math.min(elapsed / (float)DURATION, 1.0f);
-
-				// Zoom effect
-				double zoom = 0.9 + (progress * 0.12);
-				int w = (int)(SCREEN_WIDTH * zoom);
-				int h = (int)(SCREEN_HEIGHT * zoom);
-
-				// Brighten effect
-				float brightness = 0.5f + (progress * 0.4f);
-
-				// Draw scaled image
-				BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2 = scaled.createGraphics();
-				g2.drawImage(logo, 0, 0, w, h, null);
-
-				// Brighten (overlay white with alpha)
-				int alpha = (int)(255 * (1 - brightness));
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha / 255f));
-				g2.setColor(Color.WHITE);
-				g2.fillRect(0, 0, w, h);
-				g2.dispose();
-
-				// Center image
-				int x = (SCREEN_WIDTH - w) / 2;
-				int y = (SCREEN_HEIGHT - h) / 2;
-				g.drawImage(scaled, x, y, null);
-			}
-		};
-		splash.add(panel);
-		splash.setVisible(true);
-
-		// Animation timer
-		javax.swing.Timer splashDown = new javax.swing.Timer(1000 / 60, null); // 60 FPS
-		splashDown.addActionListener(new ActionListener() {
-			long start = System.currentTimeMillis();
-			public void actionPerformed(ActionEvent e) {
-				panel.repaint();
-				if (System.currentTimeMillis() - start > DURATION) {
-					splashDown.stop();
-					splash.setVisible(false);
-					splash.dispose();
-				}
-			}
-		});
-		splashDown.start();
-
-		// Wait for animation to finish
-		try {
-			Thread.sleep(DURATION + 100);
-		} catch (InterruptedException ex) {}
+		// Add panel and make window visible
+	    splash.add(panel);
+	    splash.setVisible(true);
+	
+	    // Timer to update animation at about 60 fps
+	    javax.swing.Timer splashDown = new javax.swing.Timer(1000 / 60, null);
+	    splashDown.addActionListener(new ActionListener() {
+	        long start = System.currentTimeMillis();
+	
+	        public void actionPerformed(ActionEvent e) {
+	            panel.repaint(); // tick/update image
+	
+	            // End animation after duration above
+	            if (System.currentTimeMillis() - start > DURATION) {
+	                splashDown.stop();
+	                splash.setVisible(false);
+	                splash.dispose();
+	            }
+	        }
+	    });
+	
+	    splashDown.start();
+	
+	    // Pause program until animation finishes, acts like a wait between each frame
+	    try {
+	        Thread.sleep(DURATION + 100);
+	    } catch (InterruptedException ex) {}
 	}
 
     public static void main(String[] args) {
-		// For a minor extra, a splash screen!
+		// For a minor extra, loading screen
 		// Had to look up how to do this
 		// Image and from the Helldivers 2 rpg project
 		showSplashScreen(); // this was a pain
