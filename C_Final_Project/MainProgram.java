@@ -13,28 +13,14 @@ import javax.sound.sampled.*;
 import java.io.*;
 
 public class MainProgram {
-	// private variables as needed
-	private static String rank; // Rank of the user
-	
-	private static JFrame logWin = null; // Jframe object for login window checker
-	private static boolean loginWinMade = false; // bool variable for login window checker
-	
-	private static JFrame menuWin = null; // Jframe object for menu window checker
-	private static boolean menuWinMade = false; // bool variable for menu window checker
-	
-	private static JFrame stockWin = null; // Jframe object for stock window checker
-	private static boolean stockWinMade = false; // bool variable for stock window checker
-	
-	private static JFrame snakeWin = null; // Jframe object for snake window checker
-	private static boolean snakeWinMade = false; // bool variable for snake window checker
-	
-	
 	/**
 	 * Login window function where user enters username and password,
 	 * which uses the LoginWindow class for the different operations.
 	 **/
+	private static String rank;
 	public static void login(){
 		// if window is already made, unminimize it
+		boolean loginWinMade = false;
 		if(loginWinMade){
 			logWin.setExtendedState(JFrame.NORMAL);
 		}else{
@@ -96,13 +82,13 @@ public class MainProgram {
 			});
 		}
 	}
-	
 	/**
 	 * Menu window function for moving to the different screens
 	 * of snake, stocks, and employees depending on the rank of the user.
 	 **/
 	public static void menu(){
 		// if window is already made, unminimize it
+		boolean menuWinMade = false;
 		if(menuWinMade){
 			menuWin.setExtendedState(JFrame.NORMAL);
 		}else{
@@ -157,13 +143,13 @@ public class MainProgram {
 			menuWin.setVisible(true);
 		}
 	}
-	
 	/**
 	 * Stock window function for buying and selling stock, 
 	 * viewing current prices, and current funds.
 	 **/
 	public static void stock(){
 		// if window is already made, unminimize it
+		boolean stockWinMade = false;
 		if(stockWinMade){
 			stockWin.setExtendedState(JFrame.NORMAL);
 		}else{
@@ -220,30 +206,104 @@ public class MainProgram {
 			stockWin.setVisible(true);
 		}
 	}
-	
 	/**
 	 * Snake window function for snake game
-	 **/
-	public static void snake(){
-		// if window is already made, unminimize it
-		if(snakeWinMade){
-			snakeWin.setExtendedState(JFrame.NORMAL);
-		}else{
-			// Create snake object for background stuff
-			
-			// Create snake window and properties
-			JFrame snakeWin = new JFrame("Snake");
-			snakeWinMade = true;
-			snakeWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			snakeWin.setSize(600, 300);
-			snakeWin.setLayout(new BorderLayout());
-			
-			
-			
-			// Display window
-			snakeWin.setLocationRelativeTo(null);
-			snakeWin.setVisible(true);
-		}
+	 * Handles graphics, input, and frame timer
+	 */
+	public static void snake() {
+		// Window and grid settings
+		final int CELL_SIZE = 20;
+		final int GRID_WIDTH = 20;
+		final int GRID_HEIGHT = 15;
+		final int WIDTH = GRID_WIDTH * CELL_SIZE;
+		final int HEIGHT = GRID_HEIGHT * CELL_SIZE;
+
+		// Create window for the snake game
+		JFrame snakeWin = new JFrame("Snake");
+		snakeWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		snakeWin.setSize(WIDTH + 16, HEIGHT + 39); // Adjust for window borders
+		snakeWin.setResizable(false);
+
+		// Create Snake game logic object (handles all game logic)
+		Snake snakeGame = new Snake(GRID_WIDTH, GRID_HEIGHT);
+
+		// Panel for drawing the game (graphics only)
+		JPanel gamePanel = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+
+				// Draw background
+				g.setColor(Color.BLACK);
+				g.fillRect(0, 0, WIDTH, HEIGHT);
+
+				// Draw food
+				Point food = snakeGame.getFood();
+				if (food != null) {
+					g.setColor(Color.RED);
+					g.fillOval(food.x * CELL_SIZE, food.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+				}
+
+				// Draw snake body
+				java.util.List<Point> body = snakeGame.getBody();
+				for (int i = 0; i < body.size(); i++) {
+					Point p = body.get(i);
+					if (i == 0) {
+						g.setColor(Color.GREEN); // Head
+					} else {
+						g.setColor(Color.YELLOW); // Body
+					}
+					g.fillRect(p.x * CELL_SIZE, p.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+				}
+
+				// Draw score
+				g.setColor(Color.WHITE);
+				g.drawString("Score: " + snakeGame.getScore(), 10, HEIGHT + 20);
+
+				// Draw game over message if snake is dead
+				if (!snakeGame.isAlive()) {
+					g.setColor(Color.RED);
+					g.setFont(new Font("Arial", Font.BOLD, 24));
+					g.drawString("Game Over!", WIDTH / 2 - 70, HEIGHT / 2);
+					g.setFont(new Font("Arial", Font.PLAIN, 14));
+					g.drawString("Press R to restart", WIDTH / 2 - 60, HEIGHT / 2 + 30);
+				}
+			}
+		};
+		gamePanel.setPreferredSize(new Dimension(WIDTH, HEIGHT + 30));
+		snakeWin.add(gamePanel);
+		snakeWin.pack();
+		snakeWin.setLocationRelativeTo(null);
+		snakeWin.setVisible(true);
+
+		// Key listener for direction control and restart
+		gamePanel.setFocusable(true);
+		gamePanel.requestFocusInWindow();
+		gamePanel.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_UP:    snakeGame.setDirection("UP"); break;
+					case KeyEvent.VK_DOWN:  snakeGame.setDirection("DOWN"); break;
+					case KeyEvent.VK_LEFT:  snakeGame.setDirection("LEFT"); break;
+					case KeyEvent.VK_RIGHT: snakeGame.setDirection("RIGHT"); break;
+					case KeyEvent.VK_R:     // Restart on R if game over
+						if (!snakeGame.isAlive()) snakeGame.reset();
+						break;
+				}
+			}
+		});
+
+		// Timer for game loop (animation and logic)
+		javax.swing.Timer timer = new javax.swing.Timer(100, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (snakeGame.isAlive()) {
+					snakeGame.update(); // Update game logic (move snake, check collisions, etc)
+				}
+				gamePanel.repaint(); // Redraw the game
+			}
+		});
+		timer.start();
 	}
 
 	/**
