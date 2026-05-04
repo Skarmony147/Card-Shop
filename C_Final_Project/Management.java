@@ -32,12 +32,57 @@ public class Management{
 		currentEmployees.add(wrkr2);
 		}
 	}
+	public Management(ArrayList<String> passer, double money){
+		workers = passer;
+		System.out.println(workers);
+		
+		for(int i = 0; i < workers.size(); i++){	//Adding pay to array
+			hourlyWage.add(money);
+		}
+		
+		Random rando = new Random();
+		boolean dupe = true;
+		while(dupe){
+			String wrkr1 = workers.get(rando.nextInt(workers.size()));
+			String wrkr2 = workers.get(rando.nextInt(workers.size()));
+			if(wrkr1.equals(wrkr2)){
+				continue;
+			}
+			else
+				dupe = false;
+		currentEmployees.add(wrkr1);
+		currentEmployees.add(wrkr2);
+		}
+		
+	}
 	
 	public String inHouse(){
 		return("Current employees working are: " + currentEmployees.get(0) + " and " + currentEmployees.get(1));
 	}
+	//public void Fire(String Employee){
+		
+		
+	//}
 	//For future reference, make a method called shiftChange to swap out our current employees. use the random number stuff.
-	
+	/*public void shiftChange(){
+		String current1 = currentEmployees.get(0);
+		String current2 = currentEmployees.get(1);
+		
+		Random rando = new Random();
+		boolean dupe = true;
+		while(dupe){
+			String wrkr1 = workers.get(rando.nextInt(workers.size()));
+			String wrkr2 = workers.get(rando.nextInt(workers.size()));
+			if(wrkr1.equals(wrkr2) && current1.equals(current1) && current2.equals(current2)){
+				continue;
+			}
+			else
+				dupe = false;
+		currentEmployees.add(wrkr1);
+		currentEmployees.add(wrkr2);
+		}
+		
+	}*/
 	
 	public String toString(){
 		return("Your currently employed employees are: " + workers + "\nHourly wages are: " + hourlyWage + "\n");  
