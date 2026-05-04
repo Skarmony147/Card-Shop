@@ -19,129 +19,115 @@ public class MainProgram {
 	 **/
 	private static String rank;
 	public static void login(){
-		// if window is already made, unminimize it
-		boolean loginWinMade = false;
-		if(loginWinMade){
-			logWin.setExtendedState(JFrame.NORMAL);
-		}else{
-			// Create login window and properties
-			JFrame logWin = new JFrame("Login");
-			loginWinMade = true;
-			logWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			logWin.setSize(250, 140);
-			logWin.setLayout(new BorderLayout());
-			// Create panel with flow layout
-			JPanel panel = new JPanel();
-			panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 7));
-			// Create labels, text fields, and button for username and password
-			JLabel userLabel = new JLabel("Username");
-			JTextField userTextField = new JTextField(10);
-			JLabel passLabel = new JLabel("Password");
-			JTextField passTextField = new JTextField(10);
-			JButton loginButton = new JButton("Login");
-			// Add components to the panel
-			panel.add(userLabel);
-			panel.add(userTextField);
-			panel.add(passLabel);
-			panel.add(passTextField);
-			panel.add(loginButton);
-			// Add panel to login window, center window, display window
-			logWin.add(panel, BorderLayout.CENTER);
-			logWin.setLocationRelativeTo(null);
-			logWin.setVisible(true);
-			// Create LoginWindow object to perform operations for login window
-			LoginWindow log = new LoginWindow();
-			loginButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String username = userTextField.getText();
-					String password = passTextField.getText();
-					if (log.authenticate(username, password)) {
-						loginButton.setText("Success");
-						// Use a timer for the delay, had to look this up
-						new javax.swing.Timer(1000, new ActionListener() {
-							public void actionPerformed(ActionEvent evt) {
-								logWin.setState(Frame.ICONIFIED);
-								loginButton.setText("Login");
-								rank = log.getRank();
-								passTextField.setText("");
-								userTextField.setText("");
-								menu();
-								((javax.swing.Timer)evt.getSource()).stop();
-							}
-						}).start();
-					} else {
-						loginButton.setText("Invalid");
-						new javax.swing.Timer(1000, new ActionListener() {
-							public void actionPerformed(ActionEvent evt) {
-								loginButton.setText("Login");
-								((javax.swing.Timer)evt.getSource()).stop();
-							}
-						}).start();
-					}
+		// Create login window and properties
+		JFrame logWin = new JFrame("Login");
+		logWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		logWin.setSize(250, 140);
+		logWin.setLayout(new BorderLayout());
+		// Create panel with flow layout
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 7));
+		// Create labels, text fields, and button for username and password
+		JLabel userLabel = new JLabel("Username");
+		JTextField userTextField = new JTextField(10);
+		JLabel passLabel = new JLabel("Password");
+		JTextField passTextField = new JTextField(10);
+		JButton loginButton = new JButton("Login");
+		// Add components to the panel
+		panel.add(userLabel);
+		panel.add(userTextField);
+		panel.add(passLabel);
+		panel.add(passTextField);
+		panel.add(loginButton);
+		// Add panel to login window, center window, display window
+		logWin.add(panel, BorderLayout.CENTER);
+		logWin.setLocationRelativeTo(null);
+		logWin.setVisible(true);
+		// Create LoginWindow object to perform operations for login window
+		LoginWindow log = new LoginWindow();
+		loginButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String username = userTextField.getText();
+				String password = passTextField.getText();
+				if (log.authenticate(username, password)) {
+					loginButton.setText("Success");
+					// Use a timer for the delay, had to look this up
+					new javax.swing.Timer(1000, new ActionListener() {
+						public void actionPerformed(ActionEvent evt) {
+							logWin.setState(Frame.ICONIFIED);
+							loginButton.setText("Login");
+							rank = log.getRank();
+							passTextField.setText("");
+							userTextField.setText("");
+							menu();
+							((javax.swing.Timer)evt.getSource()).stop();
+						}
+					}).start();
+				} else {
+					loginButton.setText("Invalid");
+					new javax.swing.Timer(1000, new ActionListener() {
+						public void actionPerformed(ActionEvent evt) {
+							loginButton.setText("Login");
+							((javax.swing.Timer)evt.getSource()).stop();
+						}
+					}).start();
 				}
-			});
-		}
+			}
+		});
 	}
 	/**
 	 * Menu window function for moving to the different screens
 	 * of snake, stocks, and employees depending on the rank of the user.
 	 **/
 	public static void menu(){
-		// if window is already made, unminimize it
-		boolean menuWinMade = false;
-		if(menuWinMade){
-			menuWin.setExtendedState(JFrame.NORMAL);
-		}else{
-			// Create menu window and properties
-			JFrame menuWin = new JFrame("Menu");
-			menuWinMade = true;
-			menuWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			menuWin.setSize(180, 200);
-			menuWin.setLayout(new BorderLayout());
-			// Create panel with flow layout
-			JPanel menuPanel = new JPanel();
-			menuPanel.setLayout(new GridLayout(3,1));
-			// Create buttons for snake stocks and employee management
-			// depending on rank, and add them to panel
-			if(rank.equals("Manager")){
-				JButton snakeButton = new JButton("Snake");
-				JButton stockButton = new JButton("Stocks");
-				JButton employButton = new JButton("Employees");
-				menuPanel.add(snakeButton);
-				menuPanel.add(stockButton);
-				menuPanel.add(employButton);
-				snakeButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						menuWin.setState(Frame.ICONIFIED);
-						snake();
-					}
-				});
-				stockButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						menuWin.setState(Frame.ICONIFIED);
-						stock();
-					}
-				});
-				employButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						menuWin.setState(Frame.ICONIFIED);
-						//employ();
-					}
-				});
-			} else if (rank.equals("Employee")){
-				JButton snakeButton = new JButton("Snake");
-				JButton stockButton = new JButton("Stocks");
-				menuPanel.add(snakeButton);
-				menuPanel.add(stockButton);
-			} else if (rank.equals("Rookie")){
-				JButton stockButton = new JButton("Stocks");
-				menuPanel.add(stockButton);
-			}
-			// Add panel to login window, center window, display window
-			menuWin.add(menuPanel, BorderLayout.CENTER);
-			menuWin.setLocationRelativeTo(null);
-			menuWin.setVisible(true);
+		// Create menu window and properties
+		JFrame menuWin = new JFrame("Menu");
+		menuWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menuWin.setSize(180, 200);
+		menuWin.setLayout(new BorderLayout());
+		// Create panel with flow layout
+		JPanel menuPanel = new JPanel();
+		menuPanel.setLayout(new GridLayout(3,1));
+		// Create buttons for snake stocks and employee management
+		// depending on rank, and add them to panel
+		if(rank.equals("Manager")){
+			JButton snakeButton = new JButton("Snake");
+			JButton stockButton = new JButton("Stocks");
+			JButton employButton = new JButton("Employees");
+			menuPanel.add(snakeButton);
+			menuPanel.add(stockButton);
+			menuPanel.add(employButton);
+			snakeButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					menuWin.setState(Frame.ICONIFIED);
+					snake();
+				}
+			});
+			stockButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					menuWin.setState(Frame.ICONIFIED);
+					stock();
+				}
+			});
+			employButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					menuWin.setState(Frame.ICONIFIED);
+					//employ();
+				}
+			});
+		} else if (rank.equals("Employee")){
+			JButton snakeButton = new JButton("Snake");
+			JButton stockButton = new JButton("Stocks");
+			menuPanel.add(snakeButton);
+			menuPanel.add(stockButton);
+		} else if (rank.equals("Rookie")){
+			JButton stockButton = new JButton("Stocks");
+			menuPanel.add(stockButton);
 		}
+		// Add panel to login window, center window, display window
+		menuWin.add(menuPanel, BorderLayout.CENTER);
+		menuWin.setLocationRelativeTo(null);
+		menuWin.setVisible(true);
 	}
 	/**
 	 * Stock window function for buying and selling stock, 
@@ -149,85 +135,79 @@ public class MainProgram {
 	 **/
 	public static void stock(){
 		// if window is already made, unminimize it
-		boolean stockWinMade = false;
-		if(stockWinMade){
-			stockWin.setExtendedState(JFrame.NORMAL);
-		}else{
-			// Create stocks object for references
-			Stocks inventory = new Stocks();
-			// Create stock window and properties
-			JFrame stockWin = new JFrame("Stocks");
-			stockWinMade = true;
-			stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			stockWin.setSize(400, 200);
-			stockWin.setLayout(new GridLayout(4,1));
-			// Create list of stocks for iteration creation of panels and such
-			ArrayList<String> stockNames = new ArrayList<String>(inventory.viewBrands());
-			ArrayList<Integer> stocks = new ArrayList<Integer>(inventory.viewStocks());
-			ArrayList<String> boxes = new ArrayList<String>();
-			boxes.add("ETB");
-			boxes.add("Booster bundle");
-			boxes.add("Booster box");
-			boxes.add("UPC");
-			// Iterate through stockNames making panel and componentes for each stock
-			for (int i = 0; i < stockNames.size(); i++) {
-				// Create panel and components
-				String name = stockNames.get(i);
-				String box = boxes.get(i);
-				JPanel stockPanel = new JPanel(new GridLayout(1, 5));
-				JLabel nameLabel = new JLabel(stockNames.get(i), SwingConstants.CENTER);
-				JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice(boxes.get(i))), SwingConstants.CENTER);
-				JLabel numLabel = new JLabel(Integer.toString(stocks.get(i)), SwingConstants.CENTER);
-				JButton buyButton = new JButton("Buy");
-				JButton sellButton = new JButton("Sell");
-				// Add action listeners for buy/sell buttons
-				buyButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						inventory.buyStock(name,1);
-					}
-				});
-				sellButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						inventory.sellStock(name,box,1);
-					}
-				});
-				// Add stuff to panel
-				stockPanel.add(nameLabel);
-				stockPanel.add(priceLabel);
-				stockPanel.add(numLabel);
-				stockPanel.add(buyButton);
-				stockPanel.add(sellButton);
-				// Add panel to window
-				stockWin.add(stockPanel, BorderLayout.CENTER);
-			}
-			
-			// Display window
-			stockWin.setLocationRelativeTo(null);
-			stockWin.setVisible(true);
+		// Create stocks object for references
+		Stocks inventory = new Stocks();
+		// Create stock window and properties
+		JFrame stockWin = new JFrame("Stocks");
+		stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		stockWin.setSize(400, 200);
+		stockWin.setLayout(new GridLayout(4,1));
+		// Create list of stocks for iteration creation of panels and such
+		ArrayList<String> stockNames = new ArrayList<String>(inventory.viewBrands());
+		ArrayList<Integer> stocks = new ArrayList<Integer>(inventory.viewStocks());
+		ArrayList<String> boxes = new ArrayList<String>();
+		boxes.add("ETB");
+		boxes.add("Booster bundle");
+		boxes.add("Booster box");
+		boxes.add("UPC");
+		// Iterate through stockNames making panel and componentes for each stock
+		for (int i = 0; i < stockNames.size(); i++) {
+			// Create panel and components
+			String name = stockNames.get(i);
+			String box = boxes.get(i);
+			JPanel stockPanel = new JPanel(new GridLayout(1, 5));
+			JLabel nameLabel = new JLabel(stockNames.get(i), SwingConstants.CENTER);
+			JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice(boxes.get(i))), SwingConstants.CENTER);
+			JLabel numLabel = new JLabel(Integer.toString(stocks.get(i)), SwingConstants.CENTER);
+			JButton buyButton = new JButton("Buy");
+			JButton sellButton = new JButton("Sell");
+			// Add action listeners for buy/sell buttons
+			buyButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					inventory.buyStock(name,1);
+				}
+			});
+			sellButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					inventory.sellStock(name,box,1);
+				}
+			});
+			// Add stuff to panel
+			stockPanel.add(nameLabel);
+			stockPanel.add(priceLabel);
+			stockPanel.add(numLabel);
+			stockPanel.add(buyButton);
+			stockPanel.add(sellButton);
+			// Add panel to window
+			stockWin.add(stockPanel, BorderLayout.CENTER);
 		}
+		
+		// Display window
+		stockWin.setLocationRelativeTo(null);
+		stockWin.setVisible(true);
 	}
 	/**
 	 * Snake window function for snake game
 	 * Handles graphics, input, and frame timer
 	 */
 	public static void snake() {
-		// Window and grid settings
+		// Window setup
 		final int CELL_SIZE = 20;
 		final int GRID_WIDTH = 20;
 		final int GRID_HEIGHT = 15;
 		final int WIDTH = GRID_WIDTH * CELL_SIZE;
 		final int HEIGHT = GRID_HEIGHT * CELL_SIZE;
 
-		// Create window for the snake game
 		JFrame snakeWin = new JFrame("Snake");
 		snakeWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		snakeWin.setSize(WIDTH + 16, HEIGHT + 39); // Adjust for window borders
+		snakeWin.setSize(WIDTH, HEIGHT);
 		snakeWin.setResizable(false);
 
-		// Create Snake game logic object (handles all game logic)
 		Snake snakeGame = new Snake(GRID_WIDTH, GRID_HEIGHT);
 
-		// Panel for drawing the game (graphics only)
+		JButton startButton = new JButton("Start Game");
+		startButton.setFocusable(false);
+
 		JPanel gamePanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -251,59 +231,70 @@ public class MainProgram {
 					if (i == 0) {
 						g.setColor(Color.GREEN); // Head
 					} else {
-						g.setColor(Color.YELLOW); // Body
+						g.setColor(Color.BLUE); // Body
 					}
 					g.fillRect(p.x * CELL_SIZE, p.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 				}
 
 				// Draw score
-				g.setColor(Color.WHITE);
+				g.setColor(Color.ORANGE);
 				g.drawString("Score: " + snakeGame.getScore(), 10, HEIGHT + 20);
-
-				// Draw game over message if snake is dead
-				if (!snakeGame.isAlive()) {
-					g.setColor(Color.RED);
-					g.setFont(new Font("Arial", Font.BOLD, 24));
-					g.drawString("Game Over!", WIDTH / 2 - 70, HEIGHT / 2);
-					g.setFont(new Font("Arial", Font.PLAIN, 14));
-					g.drawString("Press R to restart", WIDTH / 2 - 60, HEIGHT / 2 + 30);
-				}
 			}
 		};
-		gamePanel.setPreferredSize(new Dimension(WIDTH, HEIGHT + 30));
-		snakeWin.add(gamePanel);
+		gamePanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+
+		JPanel container = new JPanel();
+		container.setLayout(new BorderLayout());
+		container.add(gamePanel, BorderLayout.CENTER);
+		container.add(startButton, BorderLayout.SOUTH);
+		snakeWin.setContentPane(container);
 		snakeWin.pack();
 		snakeWin.setLocationRelativeTo(null);
 		snakeWin.setVisible(true);
 
-		// Key listener for direction control and restart
+		// Timer for game loop 
+		final javax.swing.Timer[] timer = new javax.swing.Timer[1];
+		timer[0] = new javax.swing.Timer(100, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (snakeGame.isAlive()) {
+					snakeGame.update();
+					gamePanel.repaint();
+				} else {
+					timer[0].stop();
+					startButton.setText("Restart Game");
+					startButton.setVisible(true);
+				}
+			}
+		});
+
+		// Key listener for direction control
 		gamePanel.setFocusable(true);
 		gamePanel.requestFocusInWindow();
 		gamePanel.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				if (!snakeGame.isAlive()) return;
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP:    snakeGame.setDirection("UP"); break;
 					case KeyEvent.VK_DOWN:  snakeGame.setDirection("DOWN"); break;
 					case KeyEvent.VK_LEFT:  snakeGame.setDirection("LEFT"); break;
 					case KeyEvent.VK_RIGHT: snakeGame.setDirection("RIGHT"); break;
-					case KeyEvent.VK_R:     // Restart on R if game over
-						if (!snakeGame.isAlive()) snakeGame.reset();
-						break;
 				}
 			}
 		});
 
-		// Timer for game loop (animation and logic)
-		javax.swing.Timer timer = new javax.swing.Timer(100, new ActionListener() {
+		// Start/Restart button action
+		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (snakeGame.isAlive()) {
-					snakeGame.update(); // Update game logic (move snake, check collisions, etc)
-				}
-				gamePanel.repaint(); // Redraw the game
+				snakeGame.reset();
+				startButton.setVisible(false);
+				gamePanel.requestFocusInWindow();
+				timer[0].start();
 			}
 		});
-		timer.start();
+
+		// Show button at start
+		startButton.setVisible(true);
 	}
 
 	/**
