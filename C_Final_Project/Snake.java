@@ -8,20 +8,14 @@ import java.util.LinkedList; // For snake body
 import java.util.Random;       // For returning the body as a List
 
 public class Snake {
-    // List representing the snake's body, with the head at the front
-    private LinkedList<Point> body;
-    // Current food position
-    private Point food;
-    // Current direction of movement ("UP", "DOWN", "LEFT", "RIGHT")
-    private String direction;
-    // Whether the snake is alive
-    private boolean alive;
-    // Current score
-    private int score;
-    // Grid dimensions
-    private int gridWidth, gridHeight;
-    // Random number generator for food placement
-    private Random rand = new Random();
+    private LinkedList<Point> body; // List representing the snake's body, with the head at the front
+    private Point food; // Current food position
+    private String direction; // Current direction of movement ("UP", "DOWN", "LEFT", "RIGHT"), paris with nextDirection to avoid clipping issue
+    private boolean alive; // Whether the snake is alive
+    private int score; // Current score
+    private int gridWidth, gridHeight; // Grid dimensions
+    private Random rand = new Random(); // Random number generator for food placement
+    private String nextDirection; // Next direction to move, pairs with direction to avoid direction reversal
 
     /**
      * Constructs a new Snake game with the given grid size.
@@ -42,6 +36,7 @@ public class Snake {
         body = new LinkedList<>();
         body.add(new Point(gridWidth / 2, gridHeight / 2)); // Start in center
         direction = "RIGHT";
+        nextDirection = "RIGHT";
         alive = true;
         score = 0;
         spawnFood();
@@ -56,8 +51,11 @@ public class Snake {
         if ((direction.equals("UP") && dir.equals("DOWN")) ||
             (direction.equals("DOWN") && dir.equals("UP")) ||
             (direction.equals("LEFT") && dir.equals("RIGHT")) ||
-            (direction.equals("RIGHT") && dir.equals("LEFT"))) return;
-        direction = dir;
+            (direction.equals("RIGHT") && dir.equals("LEFT"))) {
+            return;
+        } else {
+			nextDirection = dir; // Windows be like:
+		}
     }
 
     /**
@@ -66,14 +64,18 @@ public class Snake {
      */
     public void update() {
         if (!alive) return;
-        // Get current head position
-        Point head = new Point(body.getFirst());
+        direction = nextDirection; // Apply the next direction
+        Point head = new Point(body.getFirst()); // Get current head position
         // Move head in the current direction
         switch (direction) {
-            case "UP": head.y--; break;
-            case "DOWN": head.y++; break;
-            case "LEFT": head.x--; break;
-            case "RIGHT": head.x++; break;
+            case "UP": head.y--; 
+				break;
+            case "DOWN": head.y++; 
+				break;
+            case "LEFT": head.x--; 
+				break;
+            case "RIGHT": head.x++; 
+				break;
         }
         // Check collision with walls or self
         if (head.x < 0 || head.x >= gridWidth || head.y < 0 || head.y >= gridHeight || body.contains(head)) {

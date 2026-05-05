@@ -204,9 +204,15 @@ public class MainProgram {
 		snakeWin.setResizable(false);
 
 		Snake snakeGame = new Snake(GRID_WIDTH, GRID_HEIGHT);
-
+		
+		// Leaderboard and buttons
+		JPanel leadPanel = new JPanel();
+		leadPanel.setLayout(new BorderLayout());
+		
 		JButton startButton = new JButton("Start Game");
 		startButton.setFocusable(false);
+		JButton snakeBackButton = new JButton("Back to Menu");
+		snakeBackButton.setFocusable(false);
 
 		JPanel gamePanel = new JPanel() {
 			@Override
@@ -215,13 +221,13 @@ public class MainProgram {
 
 				// Draw background
 				g.setColor(Color.BLACK);
-				g.fillRect(0, 0, WIDTH, HEIGHT);
+				g.fillRect(0, 0, GRID_WIDTH*CELL_SIZE, GRID_HEIGHT*CELL_SIZE);
 
 				// Draw food
 				Point food = snakeGame.getFood();
 				if (food != null) {
 					g.setColor(Color.RED);
-					g.fillOval(food.x * CELL_SIZE, food.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+					g.fillRect(food.x * CELL_SIZE, food.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 				}
 
 				// Draw snake body
@@ -237,7 +243,7 @@ public class MainProgram {
 				}
 
 				// Draw score
-				g.setColor(Color.ORANGE);
+				g.setColor(Color.WHITE);
 				g.drawString("Score: " + snakeGame.getScore(), 10, HEIGHT + 20);
 			}
 		};
@@ -246,7 +252,9 @@ public class MainProgram {
 		JPanel container = new JPanel();
 		container.setLayout(new BorderLayout());
 		container.add(gamePanel, BorderLayout.CENTER);
-		container.add(startButton, BorderLayout.SOUTH);
+		container.add(leadPanel, BorderLayout.EAST);
+		leadPanel.add(startButton, BorderLayout.NORTH);
+		leadPanel.add(snakeBackButton, BorderLayout.SOUTH);
 		snakeWin.setContentPane(container);
 		snakeWin.pack();
 		snakeWin.setLocationRelativeTo(null);
@@ -254,7 +262,7 @@ public class MainProgram {
 
 		// Timer for game loop 
 		final javax.swing.Timer[] timer = new javax.swing.Timer[1];
-		timer[0] = new javax.swing.Timer(100, new ActionListener() {
+		timer[0] = new javax.swing.Timer(180, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (snakeGame.isAlive()) {
 					snakeGame.update();
