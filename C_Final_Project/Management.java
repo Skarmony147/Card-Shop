@@ -34,7 +34,6 @@ public class Management{
 	}
 	public Management(ArrayList<String> passer, double money){
 		workers = passer;
-		System.out.println(workers);
 		
 		for(int i = 0; i < workers.size(); i++){	//Adding pay to array
 			hourlyWage.add(money);
@@ -55,34 +54,55 @@ public class Management{
 		}
 		
 	}
-	
+	/**
+	 * This function tells you what employees are currently working.
+	 */
 	public String inHouse(){
 		return("Current employees working are: " + currentEmployees.get(0) + " and " + currentEmployees.get(1));
 	}
-	//public void Fire(String Employee){
-		
-		
-	//}
-	//For future reference, make a method called shiftChange to swap out our current employees. use the random number stuff.
-	/*public void shiftChange(){
+	
+	/**
+	 * This method allows the user or "manager" rank personel to fire employees.
+	 * 
+	 * @param employee is the name of the person you would like to fire.
+	 * @param reason is the text that you can write for why they were fired. It will automatically be set to no comment if you do not put anything there.
+	 */
+	public void Fire(String employee, String reason){
+		for(int i = 0; i < workers.size(); i++){
+			if(workers.get(i).equals(employee)){
+				System.out.printf("Fired %s. When questioned, the manager said, '%s'\n", employee, reason);
+				workers.remove(i);
+				hourlyWage.remove(i);
+			}
+			else{
+				System.out.println("Selected employee was not found. Please double check spelling of their name.");
+			}
+		}
+	}
+	
+	public void shiftChange(){
 		String current1 = currentEmployees.get(0);
 		String current2 = currentEmployees.get(1);
 		
 		Random rando = new Random();
 		boolean dupe = true;
 		while(dupe){
-			String wrkr1 = workers.get(rando.nextInt(workers.size()));
+			String wrkr1 = workers.get(rando.nextInt(workers.size()));	//Gets a random worker from your list of current workers
 			String wrkr2 = workers.get(rando.nextInt(workers.size()));
-			if(wrkr1.equals(wrkr2) && current1.equals(current1) && current2.equals(current2)){
+			if(wrkr1.equals(wrkr2)){
+				continue;
+			}
+			else if(wrkr1.equals(current1) || wrkr1.equals(current2) /*|| wrkr2.equals(current1) || wrkr2.equals(current2)*/){
 				continue;
 			}
 			else
 				dupe = false;
-		currentEmployees.add(wrkr1);
-		currentEmployees.add(wrkr2);
+		currentEmployees.set(0, wrkr1);
+		currentEmployees.set(1, wrkr2);
+		System.out.printf("A new shift has started bringing in %s and %s!\n", wrkr1, wrkr2);
 		}
 		
-	}*/
+	}
 	
 	public String toString(){
 		return("Your currently employed employees are: " + workers + "\nHourly wages are: " + hourlyWage + "\n");  
