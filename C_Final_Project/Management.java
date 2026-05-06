@@ -9,6 +9,7 @@ public class Management{
 	
 	
 	public Management(){
+		//Maybe make a list of a bunch of names for the constructor to choose from.
 		workers.add("Bob");	//Adding workers into the array
 		workers.add("Kat");
 		workers.add("Mikayla");
@@ -34,6 +35,7 @@ public class Management{
 	}
 	public Management(ArrayList<String> passer, double money){
 		workers = passer;
+		//Make sure they can only have max of six workers using a while loop to check and see if it equals six and a scanner maybe?
 		
 		for(int i = 0; i < workers.size(); i++){	//Adding pay to array
 			hourlyWage.add(money);
@@ -68,16 +70,21 @@ public class Management{
 	 * @param reason is the text that you can write for why they were fired. It will automatically be set to no comment if you do not put anything there.
 	 */
 	public void Fire(String employee, String reason){
+		boolean notFound = true;
 		for(int i = 0; i < workers.size(); i++){
 			if(workers.get(i).equals(employee)){
 				System.out.printf("Fired %s. When questioned, the manager said, '%s'\n", employee, reason);
 				workers.remove(i);
 				hourlyWage.remove(i);
+				notFound = false;
+				break;	
 			}
-			else{
-				System.out.println("Selected employee was not found. Please double check spelling of their name.");
-			}
+		
 		}
+		if(notFound){
+			System.out.println("Selected employee was not found. Please double check spelling of their name.");
+		}
+		
 	}
 	
 	public void shiftChange(){
