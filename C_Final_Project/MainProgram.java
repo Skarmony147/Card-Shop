@@ -82,52 +82,65 @@ public class MainProgram {
 	 * Menu window function for moving to the different screens
 	 * of snake, stocks, and employees depending on the rank of the user.
 	 **/
-	public static void menu(){
+	public static void menu() {
 		// Create menu window and properties
 		JFrame menuWin = new JFrame("Menu");
 		menuWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		menuWin.setSize(180, 200);
 		menuWin.setLayout(new BorderLayout());
-		// Create panel with flow layout
 		JPanel menuPanel = new JPanel();
 		menuPanel.setLayout(new GridLayout(3,1));
-		// Create buttons for snake stocks and employee management
-		// depending on rank, and add them to panel
+
+		// Declare buttons outside the if/else blocks - it's a suprise tool that will help us later
+		JButton snakeButton = null;
+		JButton stockButton = null;
+		JButton employButton = null;
+
+		// Create buttons for snake, stocks, and employee management depending on rank
 		if(rank.equals("Manager")){
-			JButton snakeButton = new JButton("Snake");
-			JButton stockButton = new JButton("Stocks");
-			JButton employButton = new JButton("Employees");
+			snakeButton = new JButton("Snake");
+			stockButton = new JButton("Stocks");
+			employButton = new JButton("Employees");
 			menuPanel.add(snakeButton);
 			menuPanel.add(stockButton);
 			menuPanel.add(employButton);
-			snakeButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					menuWin.dispose(); // Close menu window
-					snake(); // Open snake window
-				}
-			});
-			stockButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					menuWin.dispose(); // Close menu window
-					stock(); // Open stock window
-				}
-			});
-			employButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					menuWin.dispose(); // Close menu window
-					employ(); // Open employee window
-				}
-			});
 		} else if (rank.equals("Employee")){
-			JButton snakeButton = new JButton("Snake");
-			JButton stockButton = new JButton("Stocks");
+			snakeButton = new JButton("Snake");
+			stockButton = new JButton("Stocks");
 			menuPanel.add(snakeButton);
 			menuPanel.add(stockButton);
 		} else if (rank.equals("Rookie")){
-			JButton stockButton = new JButton("Stocks");
+			stockButton = new JButton("Stocks");
 			menuPanel.add(stockButton);
 		}
-		// Add panel to login window, center window, display window
+
+		// Add listeners only if the button exists - let's use that suprise tool
+		if (snakeButton != null) {
+			snakeButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					menuWin.dispose();
+					snake();
+				}
+			});
+		}
+		if (stockButton != null) {
+			stockButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					menuWin.dispose();
+					stock();
+				}
+			});
+		}
+		if (employButton != null) {
+			employButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					menuWin.dispose();
+					employ();
+				}
+			});
+		}
+
+		// Add panel to window, center, and show
 		menuWin.add(menuPanel, BorderLayout.CENTER);
 		menuWin.setLocationRelativeTo(null);
 		menuWin.setVisible(true);
@@ -201,6 +214,13 @@ public class MainProgram {
 		final int GRID_HEIGHT = 15;
 		final int WIDTH = GRID_WIDTH * CELL_SIZE;
 		final int HEIGHT = GRID_HEIGHT * CELL_SIZE;
+
+		// Stuff for snake framerate
+		final int INITIAL_DELAY = 200; // starting speed
+		final int MIN_DELAY = 30;      // fastest speed allowed
+		final int DELAY_DECREMENT = 4; // how much to speed up per fruit
+
+		final int[] timerDelay = { INITIAL_DELAY }; // use array to allow modification in inner class
 
 		// Create the main game window
 		JFrame snakeWin = new JFrame("Snake");
@@ -290,19 +310,32 @@ public class MainProgram {
 		final javax.swing.Timer[] timer = new javax.swing.Timer[1];
 		timer[0] = new javax.swing.Timer(180, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!snakeGame.isAlive()) {
+				if (snakeGame.isAlive()) {
 					// If alive, update game and repaint
+					int oldScore = snakeGame.getScore();
+					snakeGame.update();
+					gamePanel.repaint();
+
+					// If score increased, speed up the timer
+					// We often partkae in a modest amount of tomfoolery
+					if (snakeGame.getScore() > oldScore) {
+						timerDelay[0] = Math.max(MIN_DELAY, timerDelay[0] - DELAY_DECREMENT);
+						timer[0].setDelay(timerDelay[0]);
+					}
+				} else {
+					// Stop game and show restart button
 					timer[0].stop();
 					startButton.setText("Restart Game");
 					startButton.setVisible(true);
-				
 					// Read, update, write highscores
 					java.util.List<HighscoreEntry> scores = readHighScores();
 					String username = currentUsername; 
-					if (username == null) username = "Player";
+					if (username == null) 
+						username = "Player";
 					scores.add(new HighscoreEntry(username, snakeGame.getScore()));
 					scores.sort((a, b) -> Integer.compare(b.score, a.score));
-					if (scores.size() > 10) scores = scores.subList(0, 10);
+					if (scores.size() > 10) 
+						scores = scores.subList(0, 10);
 					writeHighScores(scores);
 					updateLeaderboard(leaderboardArea, scores);
 				}

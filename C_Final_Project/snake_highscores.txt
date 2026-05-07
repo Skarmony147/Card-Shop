@@ -1,0 +1,9 @@
+Man 48
+Milanie 42
+Driver 30
+Man 26
+Milanie 25
+Driver 18
+Man 12
+Clerker 12
+Milanie 11
