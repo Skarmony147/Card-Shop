@@ -101,7 +101,6 @@ public class Management{
 		
 	}
 	
-	//Add hire function here
 	public void Hire(String name, double pay){
 		if(workers.size() < 6){
 			System.out.printf("A new member has join the ranks. Please welcome %s!\n", name);
