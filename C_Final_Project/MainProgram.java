@@ -350,10 +350,14 @@ public class MainProgram {
 			public void keyPressed(KeyEvent e) {
 				if (!snakeGame.isAlive()) return; // Ignore input if dead
 				switch (e.getKeyCode()) {
-					case KeyEvent.VK_UP:    snakeGame.setDirection("UP"); break;
-					case KeyEvent.VK_DOWN:  snakeGame.setDirection("DOWN"); break;
-					case KeyEvent.VK_LEFT:  snakeGame.setDirection("LEFT"); break;
-					case KeyEvent.VK_RIGHT: snakeGame.setDirection("RIGHT"); break;
+					case KeyEvent.VK_UP:    
+						snakeGame.setDirection("UP"); break;
+					case KeyEvent.VK_DOWN:  
+						snakeGame.setDirection("DOWN"); break;
+					case KeyEvent.VK_LEFT:  
+						snakeGame.setDirection("LEFT"); break;
+					case KeyEvent.VK_RIGHT: 
+						snakeGame.setDirection("RIGHT"); break;
 				}
 			}
 		});
@@ -365,6 +369,8 @@ public class MainProgram {
 				snakeGame.reset();
 				startButton.setVisible(false);
 				gamePanel.requestFocusInWindow();
+				timerDelay[0] = 200; // Reset speed
+				timer[0].setDelay(timerDelay[0]);
 				timer[0].start();
 			}
 		});
@@ -451,42 +457,41 @@ public class MainProgram {
 		employWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		employWin.setSize(600, 300);
 		employWin.setLayout(new GridLayout(3,2));
-		/*// Create employee lists for iteration creation of panels and such
+		/*
+		// Create employee lists for iteration creation of panels and such
 		ArrayList<String> workerNames = new ArrayList<String>(employees.viewNames());
-		ArrayList<Integer> stocks = new ArrayList<Integer>(employees.viewWage());
+		ArrayList<Integer> wages = new ArrayList<Integer>(employees.viewWage());
 		// Iterate through names making panels and componentes for each name
 		for (int i = 0; i < workerNames.size(); i++) {
 			// Create panel and components
-			String name = stockNames.get(i);
-			String box = boxes.get(i);
-			JPanel stockPanel = new JPanel(new GridLayout(1, 5));
-			JLabel nameLabel = new JLabel(stockNames.get(i), SwingConstants.CENTER);
-			JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice(boxes.get(i))), SwingConstants.CENTER);
-			JLabel numLabel = new JLabel(Integer.toString(stocks.get(i)), SwingConstants.CENTER);
-			JButton buyButton = new JButton("Buy");
-			JButton sellButton = new JButton("Sell");
+			String name = workerNames.get(i);
+			String wage = wages.get(i);
+			JPanel employeePanel = new JPanel(new GridLayout(1, 5));
+			JLabel nameLabel = new JLabel(workerNames.get(i), SwingConstants.CENTER);
+			JLabel wageLabel = new JLabel(Double.toString(employees.viewWage(i)), SwingConstants.CENTER);
+			JButton fireButton = new JButton("Fire");
+			JButton promoteButton = new JButton("Promote");
 			// Add action listeners for buy/sell buttons
-			buyButton.addActionListener(new ActionListener() {
+			fireButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					inventory.buyStock(name,1);
+					// Fire employee, remove stuff on panel and replace with hire button
 				}
 			});
-			sellButton.addActionListener(new ActionListener() {
+			promoteButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					inventory.sellStock(name,box,1);
+					// slightly increase the pay of the worker
 				}
 			});
 			// Add stuff to panel
-			stockPanel.add(nameLabel);
-			stockPanel.add(priceLabel);
-			stockPanel.add(numLabel);
-			stockPanel.add(buyButton);
-			stockPanel.add(sellButton);
+			employeePanel.add(nameLabel);
+			employeePanel.add(wageLabel);
+			employeePanel.add(fireButton);
+			employeePanel.add(promoteButton);
 			// Add panel to window
-			stockWin.add(stockPanel, BorderLayout.CENTER);
+			employWin.add(employeePanel, BorderLayout.CENTER);
 		}
-		*/
 		
+		*/
 		// Display window
 		employWin.setLocationRelativeTo(null);
 		employWin.setVisible(true);
