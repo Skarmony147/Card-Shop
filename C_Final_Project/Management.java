@@ -75,7 +75,8 @@ public class Management{
 	}
 	
 	/**
-	 * This method allows the user or "manager" rank personel to fire employees.
+	 * This method allows the user or "manager" rank personel to fire employees and give a reason why.
+	 * If no reason has been provided, "..." will be provided instead.
 	 * 
 	 * @param employee is the name of the person you would like to fire.
 	 * @param reason is the text that you can write for why they were fired. It will automatically be set to no comment if you do not put anything there.
@@ -101,6 +102,13 @@ public class Management{
 		
 	}
 	
+	/**
+	 * This method allows the user to hire employees and give a reason why.
+	 * If you have too many workers (6) nothing will happen.
+	 * 
+	 * @param name is a string that is the name of the employee to hire.
+	 * @param pay is a double that is how much the new employee will be getting paid.
+	 */
 	public void Hire(String name, double pay){
 		if(workers.size() < 6){
 			System.out.printf("A new member has join the ranks. Please welcome %s!\n", name);
@@ -116,7 +124,54 @@ public class Management{
 	
 	
 	
-	//Add a method to change the pay of your workers
+	/**
+	 * This method allows the user to change the pay of an employee you have hired.
+	 * If if the case the name you typed in could not be found, it will do nothing.
+	 * 
+	 * @param name is a string and is the name of the employee whose wage you want to change.
+	 * @param pay is the amount that you will be paying them.
+	 */
+	public void ChangePay(String name, double pay){
+		boolean notFound = true;
+		for(int i = 0; i < workers.size(); i++){
+			if(workers.get(i).equals(name)){
+				hourlyWage.set(i, pay);
+				System.out.println(workers.get(i) + " has had their pay changed!");
+				notFound = false;
+				break;
+			}
+		}
+		if(notFound){
+			System.out.println("The selected worker could not be found. Please ensure name spelling is accurate!");
+		}
+		
+	}
+	
+	/**
+	 * This method allows the user to see the exact wage that is associated with an employee.
+	 * 
+	 * @param name is a string that is the employee's name.
+	 * 
+	 * @return is a double and will return the corresponding wage. If the wage cannot be found, it will return as -1.0.
+	 */
+	public double ViewWages(String name){
+		double wage = 0.0;
+		boolean notFound = true;
+		for(int i = 0; i < workers.size(); i++){
+			if(workers.get(i).equals(name)){
+				notFound = false;
+				wage = hourlyWage.get(i);
+				break;
+			}
+		}
+		if(notFound)
+			return(-1.0);
+		
+		else
+			return(wage);
+		
+	}
+	
 	/**
 	 * shiftChange allows for the user to have the shift change and get new people in. 
 	 * This has no real value besides acting like your people get a break/chnaging out character names.
