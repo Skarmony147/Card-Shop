@@ -25,6 +25,7 @@ public class MainProgram {
 		logWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		logWin.setSize(250, 140);
 		logWin.setLayout(new BorderLayout());
+		logWin.setResizable(false);
 		// Create panel with flow layout
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 7));
@@ -53,7 +54,7 @@ public class MainProgram {
 				currentUsername = username;
 				if (log.authenticate(username, password)) {
 					loginButton.setText("Success");
-					// Use a timer for the delay, had to look this up
+					// Use a timer for the delay
 					new javax.swing.Timer(1000, new ActionListener() {
 						public void actionPerformed(ActionEvent evt) {
 							logWin.setState(Frame.ICONIFIED);
@@ -88,6 +89,7 @@ public class MainProgram {
 		menuWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		menuWin.setSize(180, 200);
 		menuWin.setLayout(new BorderLayout());
+		menuWin.setResizable(false);
 		JPanel menuPanel = new JPanel();
 		menuPanel.setLayout(new GridLayout(3,1));
 
@@ -157,7 +159,8 @@ public class MainProgram {
 		JFrame stockWin = new JFrame("Stocks");
 		stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		stockWin.setSize(400, 200);
-		stockWin.setLayout(new GridLayout(4,1));
+		stockWin.setLayout(new GridLayout(5,1));
+		stockWin.setResizable(false);
 		// Create list of stocks for iteration creation of panels and such
 		ArrayList<String> stockNames = new ArrayList<String>((Collection<? extends String>) inventory.viewBrands());
 		ArrayList<Integer> stocks = new ArrayList<Integer>((Collection<? extends Integer>) inventory.viewStocks());
@@ -166,6 +169,20 @@ public class MainProgram {
 		boxes.add("Booster bundle");
 		boxes.add("Booster box");
 		boxes.add("UPC");
+		// Labels for each thing
+		JPanel labelPanel = new JPanel(new GridLayout(1, 5));
+		JLabel stockLabel = new JLabel("Stocks", SwingConstants.CENTER);
+		JLabel pricesLabel = new JLabel("Price", SwingConstants.CENTER);
+		JLabel amountLabel = new JLabel("Amount", SwingConstants.CENTER);
+		JLabel buySellLabel = new JLabel("Buy/Sell", SwingConstants.CENTER);
+		JButton stockBackButton = new JButton("Menu");
+		// Add to window
+		labelPanel.add(stockLabel);
+		labelPanel.add(pricesLabel);
+		labelPanel.add(amountLabel);
+		labelPanel.add(buySellLabel);
+		labelPanel.add(stockBackButton);
+		stockWin.add(labelPanel, BorderLayout.CENTER);
 		// Iterate through stockNames making panel and componentes for each stock
 		for (int i = 0; i < stockNames.size(); i++) {
 			// Create panel and components
@@ -197,6 +214,14 @@ public class MainProgram {
 			// Add panel to window
 			stockWin.add(stockPanel, BorderLayout.CENTER);
 		}
+		// Back button listener
+		stockBackButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Close stock window, open menu
+				stockWin.dispose(); // Close stock window
+        		menu(); // Open menu window
+			}
+		});
 		
 		// Display window
 		stockWin.setLocationRelativeTo(null);
@@ -378,7 +403,7 @@ public class MainProgram {
 		// Back button listener
 		snakeBackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Minimize current window, unminimize menu
+				// Close snake window and reset game, open menu
 				snakeGame.reset();
 				snakeWin.dispose(); // Close snake window
         		menu(); // Open menu window
@@ -457,6 +482,7 @@ public class MainProgram {
 		employWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		employWin.setSize(600, 300);
 		employWin.setLayout(new GridLayout(3,2));
+		employWin.setResizable(false);
 		/*
 		// Create employee lists for iteration creation of panels and such
 		ArrayList<String> workerNames = new ArrayList<String>(employees.viewNames());

@@ -59,7 +59,7 @@ public class Snake {
     }
 
     /**
-     * Updates the snake's position and handles game logic.
+     * Updates the snake's position.
      * Moves the snake, checks for collisions, handles eating food and growing, and updates alive state.
      */
     public void update() {
