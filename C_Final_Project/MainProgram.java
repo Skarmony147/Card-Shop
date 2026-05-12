@@ -158,42 +158,52 @@ public class MainProgram {
 		// Create stock window and properties
 		JFrame stockWin = new JFrame("Stocks");
 		stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		stockWin.setSize(400, 200);
+		stockWin.setSize(500, 200);
 		stockWin.setLayout(new GridLayout(5,1));
 		stockWin.setResizable(false);
 		// Create list of stocks for iteration creation of panels and such
 		ArrayList<String> stockNames = new ArrayList<String>((Collection<? extends String>) inventory.viewBrands());
 		ArrayList<Integer> stocks = new ArrayList<Integer>((Collection<? extends Integer>) inventory.viewStocks());
 		ArrayList<String> boxes = new ArrayList<String>();
-		boxes.add("ETB");
-		boxes.add("Booster bundle");
-		boxes.add("Booster box");
-		boxes.add("UPC");
+		String[] boxType = {"ETB", "Boost bundle", "Boost box", "UPC"};
+		for(int i=0; i<boxType.length; i++){
+			boxes.add(boxType[i]);
+		}
 		// Labels for each thing
-		JPanel labelPanel = new JPanel(new GridLayout(1, 5));
+		JPanel labelPanel = new JPanel(new GridLayout(1, 6));
 		JLabel stockLabel = new JLabel("Stocks", SwingConstants.CENTER);
+		JLabel boxLabel = new JLabel("Box Type", SwingConstants.CENTER);
 		JLabel pricesLabel = new JLabel("Price", SwingConstants.CENTER);
 		JLabel amountLabel = new JLabel("Amount", SwingConstants.CENTER);
 		JLabel buySellLabel = new JLabel("Buy/Sell", SwingConstants.CENTER);
 		JButton stockBackButton = new JButton("Menu");
 		// Add to window
 		labelPanel.add(stockLabel);
+		labelPanel.add(boxLabel);
 		labelPanel.add(pricesLabel);
 		labelPanel.add(amountLabel);
 		labelPanel.add(buySellLabel);
 		labelPanel.add(stockBackButton);
 		stockWin.add(labelPanel, BorderLayout.CENTER);
-		// Iterate through stockNames making panel and componentes for each stock
+		// Iterate through stockNames making panel and components for each stock
 		for (int i = 0; i < stockNames.size(); i++) {
 			// Create panel and components
 			String name = stockNames.get(i);
 			String box = boxes.get(i);
-			JPanel stockPanel = new JPanel(new GridLayout(1, 5));
+			JPanel stockPanel = new JPanel(new GridLayout(1, 6));
 			JLabel nameLabel = new JLabel(stockNames.get(i), SwingConstants.CENTER);
-			JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice(boxes.get(i))), SwingConstants.CENTER);
+			JComboBox<String> boxDrop = new JComboBox<>(boxType);
+			JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice("ETB")), SwingConstants.CENTER);
 			JLabel numLabel = new JLabel(Integer.toString(stocks.get(i)), SwingConstants.CENTER);
 			JButton buyButton = new JButton("Buy");
 			JButton sellButton = new JButton("Sell");
+			// Update price when box type changes
+			boxDrop.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String selectedBox = (String) boxDrop.getSelectedItem();
+					priceLabel.setText(Integer.toString(inventory.viewPrice(selectedBox)));
+				}
+			});
 			// Add action listeners for buy/sell buttons
 			buyButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -207,6 +217,7 @@ public class MainProgram {
 			});
 			// Add stuff to panel
 			stockPanel.add(nameLabel);
+			stockPanel.add(boxDrop);
 			stockPanel.add(priceLabel);
 			stockPanel.add(numLabel);
 			stockPanel.add(buyButton);
