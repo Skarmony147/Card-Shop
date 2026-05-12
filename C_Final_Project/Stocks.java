@@ -116,15 +116,18 @@ public class Stocks {
 		else if(littleStock){
 			System.out.println("We don't have the exact amount that you requested, but you can sell what is currently available.");
 			totalProfit = totalProfit + (prices.get(boxType) * cardInven.get(brand));
-			
 			cardInven.set(brand, 0);
 			return(cardInven.get(brand));
 		}
 		else{
 			System.out.println("The amount requested is in stock and can be sold");
+			totalProfit = totalProfit + (prices.get(boxType) * amount);
 			cardInven.set(brand, (cardInven.get(brand) - amount));
 			return(amount);
 		}
+	}
+	public double getProfits(){
+		return(totalProfit);
 	}
 	
 	public String toString(){
