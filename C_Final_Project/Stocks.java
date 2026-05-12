@@ -7,6 +7,8 @@ public class Stocks {
 	private ArrayList<Integer> cardInven = new ArrayList<Integer>();  //This will tell you how much stock you have of each brand
 	private Map<String, Integer> prices = new HashMap<String, Integer>(); //Provides a dictionary for each kind of card box that may be available.
 	
+	//may need an instance of the Report class here so I can print out everything to a file
+	private double totalProfit;
 	/**
 	 * The constructor allows the user to have a basic inventory set up of card brands
 	 */
@@ -21,10 +23,11 @@ public class Stocks {
 		}
 		//If you want to modify, the set up is (key, value). In this case it is the product in a string and then the price as an integer
 		prices.put("ETB", 50);
-		prices.put("Booster bundle", 30);
-		prices.put("Booster box", 150);
+		prices.put("Boost bundle", 30);
+		prices.put("Boost box", 150);
 		prices.put("UPC", 130);
 		
+		totalProfit = 0;
 	}
 	
 	
@@ -112,6 +115,8 @@ public class Stocks {
 		}
 		else if(littleStock){
 			System.out.println("We don't have the exact amount that you requested, but you can sell what is currently available.");
+			totalProfit = totalProfit + (prices.get(boxType) * cardInven.get(brand));
+			
 			cardInven.set(brand, 0);
 			return(cardInven.get(brand));
 		}
