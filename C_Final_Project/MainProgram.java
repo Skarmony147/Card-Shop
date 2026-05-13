@@ -497,6 +497,9 @@ public class MainProgram {
 		employWin.setSize(750, 160);
 		employWin.setLayout(new GridLayout(3,2));
 		employWin.setResizable(false);
+		// Menu and output/reason label
+		JLabel reasonLabel = new JLabel(("[Output]"), SwingConstants.CENTER);
+		JButton employBackButton = new JButton("Menu");
 		// Create employee lists for iteration creation of panels and such
 		ArrayList<String> workerNames = new ArrayList<String>(employees.workers);
 		ArrayList<Double> wages = new ArrayList<Double>(employees.hourlyWage);
@@ -518,15 +521,22 @@ public class MainProgram {
 						"I was paying them too much.",
 						"It was either tell them or sell them.",
 						"They yawned on the job. Can't have that.",
-						"Customers liked them more than m.e",
+						"Customers liked them more than me.",
 						"They accidentally showed up to a shift that wasn't for them.",
 						"Idiot thought they could outrun me.",
 						"They were climbing the rank ladder a bit too fast.",
 						"Just didn't like 'em.",
-						"They thought they could use the full break."};
+						"They thought they could use the full break.",
+						"Someone switched the shifts.",
+						"They spent their chirstmas with their family and not us.",
+						"Used pot of greed.",
+						"They won against me in chess.",
+						"Weird Al walked in.",
+						"he thought it'd be funny to insult me."};
 					final String reason = reasons[rando.nextInt(0,reasons.length)];
 					employees.Fire(name, reason);
-					// Optionally, remove the panel or update UI here
+					reasonLabel.setText(reason);
+					
 				}
 			});
 			promoteButton.addActionListener(new ActionListener() {
@@ -544,9 +554,7 @@ public class MainProgram {
 			// Add panel to window
 			employWin.add(employeePanel, BorderLayout.CENTER);
 		}
-		// Menu button and reason label
-		JLabel reasonLabel = new JLabel("[Output]");
-		JButton employBackButton = new JButton("Menu");
+		// Add reason and menu stuff after the rest
 		employWin.add(reasonLabel);
 		employWin.add(employBackButton);
 		// Back button listener
