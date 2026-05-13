@@ -7,6 +7,8 @@ public class Management{
 	private ArrayList<Double> hourlyWage = new ArrayList<Double>();	//This array is how much each of them gets paid
 	private ArrayList<String> currentEmployees = new ArrayList<String>();	//This array is which two of your workers are in rotation at the moment
 	
+	//may need an instance of the Report class here so I can print out everything to a file
+	
 	/**
 	 * This constructor sets up a basic card shop with a set amount of workers and money.
 	 */
@@ -88,7 +90,7 @@ public class Management{
 			statement = "...";
 		
 		for(int i = 0; i < workers.size(); i++){	//Checks to see if the employee you want to fire is there.
-			if(workers.get(i).equals(employee)){
+			if(workers.get(i).equalsIgnoreCase(employee)){
 				System.out.printf("Fired %s. When questioned, the manager said, '%s'\n", employee, statement);
 				workers.remove(i);
 				hourlyWage.remove(i);
@@ -134,7 +136,7 @@ public class Management{
 	public void ChangePay(String name, double pay){
 		boolean notFound = true;
 		for(int i = 0; i < workers.size(); i++){
-			if(workers.get(i).equals(name)){
+			if(workers.get(i).equalsIgnoreCase(name)){
 				hourlyWage.set(i, pay);
 				System.out.println(workers.get(i) + " has had their pay changed!");
 				notFound = false;
@@ -158,7 +160,7 @@ public class Management{
 		double wage = 0.0;
 		boolean notFound = true;
 		for(int i = 0; i < workers.size(); i++){
-			if(workers.get(i).equals(name)){
+			if(workers.get(i).equalsIgnoreCase(name)){
 				notFound = false;
 				wage = hourlyWage.get(i);
 				break;
