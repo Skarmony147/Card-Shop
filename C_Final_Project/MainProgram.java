@@ -17,6 +17,7 @@ public class MainProgram {
 	 * Login window function where user enters username and password,
 	 * which uses the LoginWindow class for the different operations.
 	 **/
+	private static Random rando = new Random(); // For "certain things".
 	private static String rank; // Rank of user
 	private static String currentUsername = "Player"; // username of user used for snake leaderboard
 	public static void login(){
@@ -187,9 +188,9 @@ public class MainProgram {
 		stockWin.add(labelPanel, BorderLayout.CENTER);
 		// Iterate through stockNames making panel and components for each stock
 		for (int i = 0; i < stockNames.size(); i++) {
+			final int stockIndex = i; // Get the index for use in the buy/sell listeners
 			// Create panel and components
 			String name = stockNames.get(i);
-			String box = boxes.get(i);
 			JPanel stockPanel = new JPanel(new GridLayout(1, 6));
 			JLabel nameLabel = new JLabel(stockNames.get(i), SwingConstants.CENTER);
 			JComboBox<String> boxDrop = new JComboBox<>(boxType);
@@ -208,11 +209,13 @@ public class MainProgram {
 			buyButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					inventory.buyStock(name,1);
+					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
 				}
 			});
 			sellButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					inventory.sellStock(name,box,1);
+					inventory.sellStock(name,(String)boxDrop.getSelectedItem(),1);
+					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
 				}
 			});
 			// Add stuff to panel
@@ -491,32 +494,45 @@ public class MainProgram {
 		// Create employment window and properties
 		JFrame employWin = new JFrame("Employees");
 		employWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		employWin.setSize(600, 300);
-		employWin.setLayout(new GridLayout(3,2));
+		employWin.setSize(750, 140);
+		employWin.setLayout(new GridLayout(2,2));
 		employWin.setResizable(false);
-		/*
 		// Create employee lists for iteration creation of panels and such
-		ArrayList<String> workerNames = new ArrayList<String>(employees.viewNames());
-		ArrayList<Integer> wages = new ArrayList<Integer>(employees.viewWage());
-		// Iterate through names making panels and componentes for each name
+		ArrayList<String> workerNames = new ArrayList<String>(employees.workers);
+		ArrayList<Double> wages = new ArrayList<Double>(employees.hourlyWage);
+		// Iterate through names making panels and components for each name
 		for (int i = 0; i < workerNames.size(); i++) {
-			// Create panel and components
 			String name = workerNames.get(i);
-			String wage = wages.get(i);
+			Double wage = wages.get(i);
 			JPanel employeePanel = new JPanel(new GridLayout(1, 5));
-			JLabel nameLabel = new JLabel(workerNames.get(i), SwingConstants.CENTER);
-			JLabel wageLabel = new JLabel(Double.toString(employees.viewWage(i)), SwingConstants.CENTER);
+			JLabel nameLabel = new JLabel(name, SwingConstants.CENTER);
+			JLabel wageLabel = new JLabel(Double.toString(wage), SwingConstants.CENTER);
 			JButton fireButton = new JButton("Fire");
 			JButton promoteButton = new JButton("Promote");
-			// Add action listeners for buy/sell buttons
+			// Add action listeners for fire/promote buttons
 			fireButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					// Fire employee, remove stuff on panel and replace with hire button
+					String[] reasons = {"No comment.", 
+						"They had a criminal history.", 
+						"I was bribed.",
+						"I was paying them too much.",
+						"It was either tell them or sell them.",
+						"They yawned on the job. Can't have that.",
+						"Customers liked them more than m.e",
+						"They accidentally showed up to a shift that wasn't for them.",
+						"Idiot thought they could outrun me.",
+						"They were climbing the rank ladder a bit too fast.",
+						"Just didn't like 'em.",
+						"They thought they could use the full break."};
+					employees.Fire(name, reasons[rando.nextInt(0,reasons.length)]);
+					// Optionally, remove the panel or update UI here
 				}
 			});
 			promoteButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					// slightly increase the pay of the worker
+					double newWage = wage + 1.00;
+					employees.hourlyWage.set(workerNames.indexOf(name), newWage);
+					wageLabel.setText(Double.toString(newWage));
 				}
 			});
 			// Add stuff to panel
@@ -528,7 +544,6 @@ public class MainProgram {
 			employWin.add(employeePanel, BorderLayout.CENTER);
 		}
 		
-		*/
 		// Display window
 		employWin.setLocationRelativeTo(null);
 		employWin.setVisible(true);
