@@ -494,8 +494,8 @@ public class MainProgram {
 		// Create employment window and properties
 		JFrame employWin = new JFrame("Employees");
 		employWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		employWin.setSize(750, 140);
-		employWin.setLayout(new GridLayout(2,2));
+		employWin.setSize(750, 160);
+		employWin.setLayout(new GridLayout(3,2));
 		employWin.setResizable(false);
 		// Create employee lists for iteration creation of panels and such
 		ArrayList<String> workerNames = new ArrayList<String>(employees.workers);
@@ -524,7 +524,8 @@ public class MainProgram {
 						"They were climbing the rank ladder a bit too fast.",
 						"Just didn't like 'em.",
 						"They thought they could use the full break."};
-					employees.Fire(name, reasons[rando.nextInt(0,reasons.length)]);
+					final String reason = reasons[rando.nextInt(0,reasons.length)];
+					employees.Fire(name, reason);
 					// Optionally, remove the panel or update UI here
 				}
 			});
@@ -543,6 +544,19 @@ public class MainProgram {
 			// Add panel to window
 			employWin.add(employeePanel, BorderLayout.CENTER);
 		}
+		// Menu button and reason label
+		JLabel reasonLabel = new JLabel("[Output]");
+		JButton employBackButton = new JButton("Menu");
+		employWin.add(reasonLabel);
+		employWin.add(employBackButton);
+		// Back button listener
+		employBackButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Close management window, open menu
+				employWin.dispose(); // Close managment window
+        		menu(); // Open menu window
+			}
+		});
 		
 		// Display window
 		employWin.setLocationRelativeTo(null);
