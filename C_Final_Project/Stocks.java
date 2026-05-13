@@ -59,17 +59,6 @@ public class Stocks {
 		}
 		if(notFound)
 			System.out.println("There was an error with your selected card brand and the purchase did not go through. Please ensure spelling is correct.");
-		
-		/*if(cards.get(0).equals(cardType))
-			cardInven.set(0, cardInven.get(0) + amount);
-		else if(cards.get(1).equals(cardType))
-			cardInven.set(1, cardInven.get(1) + amount);
-		else if(cards.get(2).equals(cardType))
-			cardInven.set(2, cardInven.get(2) + amount);
-		else if(cards.get(3).equals(cardType))
-			cardInven.set(3, cardInven.get(3) + amount);	
-		else
-			System.out.println("There was an error with your selected card brand and the purchase did not go through. Please ensure spelling is correct.");*/
 	}
 	/**
 	 * This method allows the user to view current stock for a specific card brand
