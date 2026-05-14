@@ -20,6 +20,7 @@ public class MainProgram {
 	private static Random rando = new Random(); // For "certain things".
 	private static String rank; // Rank of user
 	private static String currentUsername = "Player"; // username of user used for snake leaderboard
+	private static double funds = 500; // Total cash 
 	public static void login(){
 		// Create login window and properties
 		JFrame logWin = new JFrame("Login");
@@ -88,11 +89,15 @@ public class MainProgram {
 		// Create menu window and properties
 		JFrame menuWin = new JFrame("Menu");
 		menuWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		menuWin.setSize(180, 200);
+		menuWin.setSize(200, 200);
 		menuWin.setLayout(new BorderLayout());
 		menuWin.setResizable(false);
 		JPanel menuPanel = new JPanel();
-		menuPanel.setLayout(new GridLayout(3,1));
+		menuPanel.setLayout(new GridLayout(5,1));
+		
+		// Funds label
+		JLabel menuFunds = new JLabel(String.format("Current funds: $%.2f", funds), SwingConstants.CENTER);
+		menuPanel.add(menuFunds); 
 
 		// Declare buttons outside the if/else blocks - it's a suprise tool that will help us later
 		JButton snakeButton = null;
@@ -110,11 +115,17 @@ public class MainProgram {
 		} else if (rank.equals("Employee")){
 			snakeButton = new JButton("Snake");
 			stockButton = new JButton("Stocks");
+			JLabel employees = new JLabel("Employees", SwingConstants.CENTER);
 			menuPanel.add(snakeButton);
 			menuPanel.add(stockButton);
+			menuPanel.add(employees);
 		} else if (rank.equals("Rookie")){
 			stockButton = new JButton("Stocks");
+			JLabel snek = new JLabel("Snake", SwingConstants.CENTER);
+			JLabel employees = new JLabel("Employees", SwingConstants.CENTER);
 			menuPanel.add(stockButton);
+			menuPanel.add(snek);
+			menuPanel.add(employees);
 		}
 
 		// Add listeners only if the button exists - let's use that suprise tool
@@ -142,6 +153,10 @@ public class MainProgram {
 				}
 			});
 		}
+		
+		// Receipt button
+		JButton endOfDay = new JButton("Receipt");
+		menuPanel.add(endOfDay);
 
 		// Add panel to window, center, and show
 		menuWin.add(menuPanel, BorderLayout.CENTER);
@@ -153,14 +168,13 @@ public class MainProgram {
 	 * viewing current prices, and current funds.
 	 **/
 	public static void stock(){
-		// if window is already made, unminimize it
 		// Create stocks object for references
 		Stocks inventory = new Stocks();
 		// Create stock window and properties
 		JFrame stockWin = new JFrame("Stocks");
 		stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		stockWin.setSize(500, 200);
-		stockWin.setLayout(new GridLayout(5,1));
+		stockWin.setLayout(new GridLayout(6,1));
 		stockWin.setResizable(false);
 		// Create list of stocks for iteration creation of panels and such
 		ArrayList<String> stockNames = new ArrayList<String>((Collection<? extends String>) inventory.viewBrands());
@@ -177,14 +191,14 @@ public class MainProgram {
 		JLabel pricesLabel = new JLabel("Price", SwingConstants.CENTER);
 		JLabel amountLabel = new JLabel("Amount", SwingConstants.CENTER);
 		JLabel buySellLabel = new JLabel("Buy/Sell", SwingConstants.CENTER);
-		JButton stockBackButton = new JButton("Menu");
-		// Add to window
+		JLabel placeholder = new JLabel();
+		// Add labels to panel
 		labelPanel.add(stockLabel);
 		labelPanel.add(boxLabel);
 		labelPanel.add(pricesLabel);
 		labelPanel.add(amountLabel);
 		labelPanel.add(buySellLabel);
-		labelPanel.add(stockBackButton);
+		labelPanel.add(placeholder);
 		stockWin.add(labelPanel, BorderLayout.CENTER);
 		// Iterate through stockNames making panel and components for each stock
 		for (int i = 0; i < stockNames.size(); i++) {
@@ -225,9 +239,18 @@ public class MainProgram {
 			stockPanel.add(numLabel);
 			stockPanel.add(buyButton);
 			stockPanel.add(sellButton);
+			
 			// Add panel to window
 			stockWin.add(stockPanel, BorderLayout.CENTER);
 		}
+		// Bottom row output thing, funds, menu button
+		JPanel lowStocks = new JPanel(new GridLayout(1, 2));
+		JLabel stockFunds = new JLabel(String.format("Funds: $%.2f", funds), SwingConstants.CENTER);
+		JButton stockBackButton = new JButton("Menu");
+		lowStocks.add(stockFunds);
+		lowStocks.add(stockBackButton);
+		stockWin.add(lowStocks);
+		
 		// Back button listener
 		stockBackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -528,11 +551,12 @@ public class MainProgram {
 						"Just didn't like 'em.",
 						"They thought they could use the full break.",
 						"Someone switched the shifts.",
-						"They spent their chirstmas with their family and not us.",
+						"They spent their christmas with their family and not us.",
 						"Used pot of greed.",
 						"They won against me in chess.",
 						"Weird Al walked in.",
-						"he thought it'd be funny to insult me."};
+						"He thought it'd be funny to insult me.",
+						"Y̶̨̍o̴̹̿ǘ̴̼ ̵͙̓ä̸̪́r̵̜̉e̵̛̫ ̸̫̕ṇ̷̽o̶͓͝ț̸̎ ̶̠̀s̸̗̊u̷̳͛p̸̝̎ṕ̴̖ò̶͉ś̵͕ḙ̶̀d̶̬̄ ̸̡͗t̸̼̅o̵͙̅ ̶̮͘b̸̬̈́e̸͈͐ ̷̦̾h̸͔̍e̷̡͝r̷͋ͅe̶͕̎.̵̻̚"};
 					final String reason = reasons[rando.nextInt(0,reasons.length)];
 					employees.Fire(name, reason);
 					reasonLabel.setText(reason);
