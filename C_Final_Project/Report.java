@@ -2,19 +2,29 @@ import java.io.*;
 
 public class Report{
 	
-	/*try{
-		PrintWriter printy = new PrintWriter("DailyReport.txt");
+	public static void Begin(double remainingFunds, String employeeData){
+		try{
+			PrintWriter printy = new PrintWriter("DailyReport.txt");
+			printy.printf("Your total amount in your business account is: $%.2f dollars\n", remainingFunds);
+			printy.printf(employeeData);
+			if(remainingFunds <= 0)
+				printy.println("Please ensure you are making profit, this cannot happen again.");
+			else if(remainingFunds < 100)
+				printy.println("You are doing all right. Keep it up!");
+			else if(remainingFunds < 500)
+				printy.println("Very very nice manager. Please keep up this behavior to ensure you get more holidays!");
+			else
+				printy.println("Wow! Very good! Your store is going well. Superb job manager!");
+			
+			System.out.println("Please check your files for 'DailyReport.txt'");
+			printy.close();
+		}
 		
+		catch(Exception e){
+			System.out.println("There was an error with your daily report: " + e);
+		}
 		
 	}
-	catch(Exception e){
-		System.out.println("There was an error with your daily report: " + e);
-	}
-	
-	
-	This is the idea for the Report thingy, but its bugging out.
-	
-	*/
 	
 	
 	
