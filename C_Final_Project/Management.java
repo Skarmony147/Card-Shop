@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Management{
 	
-	public ArrayList<String> workers = new ArrayList<String>();	//This array is all your possible workers workin gat your store
-	public ArrayList<Double> hourlyWage = new ArrayList<Double>();	//This array is how much each of them gets paid
+	private ArrayList<String> workers = new ArrayList<String>();	//This array is all your possible workers workin gat your store
+	private ArrayList<Double> hourlyWage = new ArrayList<Double>();	//This array is how much each of them gets paid
 	private ArrayList<String> currentEmployees = new ArrayList<String>();	//This array is which two of your workers are in rotation at the moment
 	
 	//may need an instance of the Report class here so I can print out everything to a file
@@ -120,8 +120,6 @@ public class Management{
 		else
 			System.out.println("You have too many workers than this shop can contain/pay!");
 		
-		
-		
 	}
 	
 	
@@ -201,6 +199,14 @@ public class Management{
 		}
 		
 	}
+	public ArrayList<String> getEmployees(){
+		return(workers);
+	}
+	
+	public ArrayList<Double> getWages(){
+		return(hourlyWage);
+	}
+	
 	/**
 	 * overrides the basic toString method and instead displays all of the workers you currently have hired and how much they are getting paid.
 	 */
