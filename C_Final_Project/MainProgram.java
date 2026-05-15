@@ -524,21 +524,22 @@ public class MainProgram {
 		JLabel reasonLabel = new JLabel(("[Output]"), SwingConstants.CENTER);
 		JButton employBackButton = new JButton("Menu");
 		// Create employee lists for iteration creation of panels and such
-		ArrayList<String> workerNames = new ArrayList<String>(employees.workers);
-		ArrayList<Double> wages = new ArrayList<Double>(employees.hourlyWage);
+		ArrayList<String> workerNames = new ArrayList<String>(employees.getEmployees());
+		ArrayList<Double> wages = new ArrayList<Double>(employees.getWages());
 		// Iterate through names making panels and components for each name
 		for (int i = 0; i < workerNames.size(); i++) {
 			String name = workerNames.get(i);
 			Double wage = wages.get(i);
 			JPanel employeePanel = new JPanel(new GridLayout(1, 5));
 			JLabel nameLabel = new JLabel(name, SwingConstants.CENTER);
-			JLabel wageLabel = new JLabel(Double.toString(wage), SwingConstants.CENTER);
+			JLabel wageLabel = new JLabel(String.format("$%.2f", wage), SwingConstants.CENTER);
 			JButton fireButton = new JButton("Fire");
 			JButton promoteButton = new JButton("Promote");
 			// Add action listeners for fire/promote buttons
 			fireButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String[] reasons = {"No comment.", 
+					String[] reasons = {
+						"No comment.", 
 						"They had a criminal history.", 
 						"I was bribed.",
 						"I was paying them too much.",
@@ -552,22 +553,20 @@ public class MainProgram {
 						"They thought they could use the full break.",
 						"Someone switched the shifts.",
 						"They spent their christmas with their family and not us.",
-						"Used pot of greed.",
 						"They won against me in chess.",
-						"Weird Al walked in.",
-						"He thought it'd be funny to insult me.",
+						"They thought it'd be funny to insult me.",
+						"Arceus vs Babe Ruth vs Exodia vs Skullclamp didn't end well.",
 						"Y̶̨̍o̴̹̿ǘ̴̼ ̵͙̓ä̸̪́r̵̜̉e̵̛̫ ̸̫̕ṇ̷̽o̶͓͝ț̸̎ ̶̠̀s̸̗̊u̷̳͛p̸̝̎ṕ̴̖ò̶͉ś̵͕ḙ̶̀d̶̬̄ ̸̡͗t̸̼̅o̵͙̅ ̶̮͘b̸̬̈́e̸͈͐ ̷̦̾h̸͔̍e̷̡͝r̷͋ͅe̶͕̎.̵̻̚"};
 					final String reason = reasons[rando.nextInt(0,reasons.length)];
 					employees.Fire(name, reason);
 					reasonLabel.setText(reason);
-					
 				}
 			});
 			promoteButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					double newWage = wage + 1.00;
-					employees.hourlyWage.set(workerNames.indexOf(name), newWage);
-					wageLabel.setText(Double.toString(newWage));
+					double newWage = Double.parseDouble(wageLabel.getText().replace("$", "")) + 0.50;
+					employees.ChangePay(workerNames.get(workerNames.indexOf(name)), newWage);
+					wageLabel.setText(String.format("$%.2f", newWage));
 				}
 			});
 			// Add stuff to panel
@@ -598,14 +597,13 @@ public class MainProgram {
 	/**
 	 * This function shows a splash screen with the logo and sound taken from the HD2 RPG project
 	 * This was a pain, but it works so hurrah
-	 * Way, way too much code I had to look up, best considered copied entirely from various sources
-	 * 
+	 * Had to look up this code, best considered copied entirely from various sources
 	 */
 	public static void showSplashScreen() {
 	    // Basic splash screen settings
 	    int SCREEN_WIDTH = 400;
 	    int SCREEN_HEIGHT = 250;
-	    int DURATION = 4700; // milliseconds
+	    int DURATION = 4700; 
 	    String IMAGE_PATH = "FreedomTM.png";
 	    String SOUND_PATH = "Logo.wav";
 	
