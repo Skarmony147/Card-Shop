@@ -208,15 +208,15 @@ public class MainProgram {
 			JPanel stockPanel = new JPanel(new GridLayout(1, 6));
 			JLabel nameLabel = new JLabel(stockNames.get(i), SwingConstants.CENTER);
 			JComboBox<String> boxDrop = new JComboBox<>(boxType);
-			JLabel priceLabel = new JLabel(Integer.toString(inventory.viewPrice("ETB")), SwingConstants.CENTER);
+			JLabel priceLabel = new JLabel(String.format("$%.2f", (double)inventory.viewPrice("ETB")), SwingConstants.CENTER);
 			JLabel numLabel = new JLabel(Integer.toString(stocks.get(i)), SwingConstants.CENTER);
 			JButton buyButton = new JButton("Buy");
 			JButton sellButton = new JButton("Sell");
 			// Update price when box type changes
 			boxDrop.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String selectedBox = (String) boxDrop.getSelectedItem();
-					priceLabel.setText(Integer.toString(inventory.viewPrice(selectedBox)));
+					String selectedBox = (String)boxDrop.getSelectedItem();
+					priceLabel.setText(String.format("$%.2f", (double)inventory.viewPrice(selectedBox)));
 				}
 			});
 			// Add action listeners for buy/sell buttons
@@ -511,142 +511,117 @@ public class MainProgram {
 	 * Employment window for firing, hiring, and promoting employees.
 	 **/
 	public static void employ(){
-        // Create management object for references
-        Management employees = new Management();
-        // Create employment window and properties
-        JFrame employWin = new JFrame("Employees");
-        employWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        employWin.setSize(750, 160);
-        employWin.setLayout(new GridLayout(0,1)); // Use variable rows for dynamic add/remove
-        employWin.setResizable(false);
-
-        // Menu and output/reason label
-        JLabel reasonLabel = new JLabel(("[Output]"), SwingConstants.CENTER);
-        JButton employBackButton = new JButton("Menu");
-
-        // Panel to hold all employee panels for easy management
-        JPanel employeesPanel = new JPanel(new GridLayout(0, 1));
-        employWin.add(employeesPanel);
-
-        // Helper function to create an employee panel
-        refreshEmployees(employees, employeesPanel, reasonLabel, employWin);
-
-        // Add reason and menu stuff after the rest
-        employWin.add(reasonLabel);
-        employWin.add(employBackButton);
-
-        // Back button listener
-        employBackButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Close management window, open menu
-                employWin.dispose(); // Close management window
-                menu(); // Open menu window
-            }
-        });
-
-        // Display window
-        employWin.setLocationRelativeTo(null);
-        employWin.setVisible(true);
-    }
-
-    /**
-     * Helper function to refresh the employee panels.
-     */
-    private static void refreshEmployees(Management employees, JPanel employeesPanel, JLabel reasonLabel, JFrame employWin) {
-        employeesPanel.removeAll();
-        ArrayList<String> workerNames = new ArrayList<>(employees.getEmployees());
-        ArrayList<Double> wages = new ArrayList<>(employees.getWages());
-
-        for (int i = 0; i < workerNames.size(); i++) {
-            String name = workerNames.get(i);
-            Double wage = wages.get(i);
-            JPanel employeePanel = new JPanel(new GridLayout(1, 5));
-            JLabel nameLabel = new JLabel(name, SwingConstants.CENTER);
-            JLabel wageLabel = new JLabel(String.format("$%.2f", wage), SwingConstants.CENTER);
-            JButton fireButton = new JButton("Fire");
-            JButton promoteButton = new JButton("Promote");
-
-            // Fire button: replaces this panel with a hire button
-            fireButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    String[] reasons = {
-                        "No comment.", "They had a criminal history.", "I was bribed.",
-                        "I was paying them too much.", "It was either tell them or sell them.",
-                        "They yawned on the job. Can't have that.", "Customers liked them more than me.",
-                        "They accidentally showed up to a shift that wasn't for them.",
-                        "Idiot thought they could outrun me.", "They were climbing the rank ladder a bit too fast.",
-                        "Just didn't like 'em.", "They thought they could use the full break.",
-                        "Someone switched the shifts.", "They spent their christmas with their family and not us.",
-                        "They won against me in chess.", "They thought it'd be funny to insult me.",
-                        "Arceus vs Babe Ruth vs Exodia vs Skullclamp didn't end well.",
-                        "Y̶̨̍o̴̹̿ǘ̴̼ ̵͙̓ä̸̪́r̵̜̉e̵̛̫ ̸̫̕ṇ̷̽o̶͓͝ț̸̎ ̶̠̀s̸̗̊u̷̳͛p̸̝̎ṕ̴̖ò̶͉ś̵͕ḙ̶̀d̶̬̄ ̸̡͗t̸̼̅o̵͙̅ ̶̮͘b̸̬̈́e̸͈͐ ̷̦̾h̸͔̍e̷̡͝r̷͋ͅe̶͕̎.̵̻̚"
-                    };
-                    final String reason = reasons[rando.nextInt(0, reasons.length)];
-                    employees.Fire(name, reason);
-                    reasonLabel.setText(reason);
-
-                    // Replace this employee panel with a hire button panel
-                    JPanel hirePanel = new JPanel(new GridLayout(1, 3));
-                    JTextField nameField = new JTextField("Name", 8);
-                    JTextField wageField = new JTextField("Wage", 5);
-                    JButton hireButton = new JButton("Hire New Employee");
-
-                    // Hire button logic
-                    hireButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            String newName = nameField.getText().trim();
-                            double newWage;
-                            try {
-                                newWage = Double.parseDouble(wageField.getText().trim());
-                            } catch (Exception ex) {
-                                reasonLabel.setText("Invalid wage.");
-                                return;
-                            }
-                            if (newName.isEmpty()) {
-                                reasonLabel.setText("Name required.");
-                                return;
-                            }
-                            employees.Hire(newName, newWage);
-                            reasonLabel.setText("Hired " + newName + "!");
-                            // Refresh the employee list
-                            refreshEmployees(employees, employeesPanel, reasonLabel, employWin);
-                            employeesPanel.revalidate();
-                            employeesPanel.repaint();
-                        }
-                    });
-
-                    hirePanel.add(nameField);
-                    hirePanel.add(wageField);
-                    hirePanel.add(hireButton);
-
-                    // Remove the fired employee panel and add the hire panel, 
-					// then refresh the entire employee panel list
-					refreshEmployees(employees, employeesPanel, reasonLabel, employWin);
-                }
-            });
-
-            // Promote button: increases wage and updates label/array
-            promoteButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    double newWage = Double.parseDouble(wageLabel.getText().replace("$", "")) + 0.50;
-                    employees.ChangePay(name, newWage);
-                    wageLabel.setText(String.format("$%.2f", newWage));
-                    reasonLabel.setText(name + " promoted!");
-                }
-            });
-
-            // Add components to employee panel
-            employeePanel.add(nameLabel);
-            employeePanel.add(wageLabel);
-            employeePanel.add(fireButton);
-            employeePanel.add(promoteButton);
-
-            // Add employee panel to the main employees panel
-            employeesPanel.add(employeePanel);
-        }
-        employeesPanel.revalidate();
-        employeesPanel.repaint();
-    }
+		// Create management object for references
+		Management employees = new Management();
+		// Create employment window and properties
+		JFrame employWin = new JFrame("Employees");
+		employWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		employWin.setSize(750, 160);
+		employWin.setLayout(new GridLayout(3,2));
+		employWin.setResizable(false);
+		// Menu and output/reason label
+		JLabel reasonLabel = new JLabel(("[Output]"), SwingConstants.CENTER);
+		JButton employBackButton = new JButton("Menu");
+		// Create employee lists for iteration creation of panels and such
+		ArrayList<String> workerNames = new ArrayList<String>(employees.getEmployees());
+		ArrayList<Double> wages = new ArrayList<Double>(employees.getWages());
+		// Iterate through names making panels and components for each name
+		for (int i = 0; i < workerNames.size(); i++) {
+			String name = workerNames.get(i);
+			Double wage = wages.get(i);
+			JPanel employeePanel = new JPanel(new GridLayout(1, 5));
+			JLabel nameLabel = new JLabel(name, SwingConstants.CENTER);
+			JLabel wageLabel = new JLabel(String.format("$%.2f", wage), SwingConstants.CENTER);
+			JButton fireButton = new JButton("Fire");
+			JButton promoteButton = new JButton("Promote");
+			JButton hireButton = new JButton("Hire New");
+			// Add action listeners for fire/promote buttons
+			fireButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String[] reasons = {
+						"No comment.", 
+						"They had a criminal history.", 
+						"I was bribed.",
+						"I was paying them too much.",
+						"It was either tell them or sell them.",
+						"They yawned on the job. Can't have that.",
+						"Customers liked them more than me.",
+						"They accidentally showed up to a shift that wasn't for them.",
+						"Idiot thought they could outrun me.",
+						"They were climbing the rank ladder a bit too fast.",
+						"Just didn't like 'em.",
+						"They thought they could use the full break.",
+						"Someone switched the shifts.",
+						"They spent their christmas with their family and not us.",
+						"They won against me in chess.",
+						"They thought it'd be funny to insult me.",
+						"Arceus vs Babe Ruth vs Exodia vs Skullclamp didn't end well."};
+					final String reason = reasons[rando.nextInt(0, reasons.length)];
+					employees.Fire(name, reason);
+					reasonLabel.setText(reason);
+					// When firing an employee, delete all the stuff for them and put hire button
+					employeePanel.remove(nameLabel);
+					employeePanel.remove(wageLabel);
+					employeePanel.remove(fireButton);
+					employeePanel.remove(promoteButton);
+					employeePanel.setLayout(new BorderLayout());
+					employeePanel.add(hireButton);
+					employeePanel.repaint();
+				}
+			});
+			// Hire button listener
+			hireButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String[] names = { // Ripped the names from google
+						"Liam", "Noah", "Oliver", "Theodore", "Henry",
+						"James", "Elijah", "Mateo", "Lucas", "William",
+						"Olivia", "Charlotte", "Emma", "Amelia", "Sophia",
+						"Mia", "Isabella", "Evelyn", "Sofia", "Eliana",
+					};
+					employees.Hire(names[rando.nextInt(0, names.length)], 14.50);
+					// Re add stuff from firing
+					employeePanel.remove(hireButton);
+					employeePanel.setLayout(new GridLayout(1, 5));
+					employeePanel.add(nameLabel);
+					employeePanel.add(wageLabel);
+					employeePanel.add(fireButton);
+					employeePanel.add(promoteButton);
+					employeePanel.repaint();
+				}
+			});
+			
+			// Promote button listener, increase pay by $0.50
+			promoteButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					double newWage = Double.parseDouble(wageLabel.getText().replace("$", "")) + 0.50;
+					employees.ChangePay(workerNames.get(workerNames.indexOf(name)), newWage);
+					wageLabel.setText(String.format("$%.2f", newWage));
+				}
+			});
+			// Add stuff to panel
+			employeePanel.add(nameLabel);
+			employeePanel.add(wageLabel);
+			employeePanel.add(fireButton);
+			employeePanel.add(promoteButton);
+			// Add panel to window
+			employWin.add(employeePanel, BorderLayout.CENTER);
+		}
+		// Add reason and menu stuff after the rest
+		employWin.add(reasonLabel);
+		employWin.add(employBackButton);
+		// Back button listener
+		employBackButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Close management window, open menu
+				employWin.dispose(); // Close managment window
+        		menu(); // Open menu window
+			}
+		});
+		
+		// Display window
+		employWin.setLocationRelativeTo(null);
+		employWin.setVisible(true);
+	}
 
 	/**
 	 * This function shows a splash screen with the logo and sound taken from the HD2 RPG project
