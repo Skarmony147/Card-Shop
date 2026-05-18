@@ -6,7 +6,7 @@ public class Management{
 	private ArrayList<String> workers = new ArrayList<String>();	//This array is all your possible workers workin gat your store
 	private ArrayList<Double> hourlyWage = new ArrayList<Double>();	//This array is how much each of them gets paid
 	private ArrayList<String> currentEmployees = new ArrayList<String>();	//This array is which two of your workers are in rotation at the moment
-	
+	private double paidMoney;
 	//may need an instance of the Report class here so I can print out everything to a file
 	
 	/**
@@ -36,6 +36,7 @@ public class Management{
 		currentEmployees.add(wrkr1);
 		currentEmployees.add(wrkr2);
 		}
+		paidMoney = 0.00;
 	}
 	
 	/**
@@ -47,8 +48,6 @@ public class Management{
 	 */
 	public Management(ArrayList<String> passer, double money){
 		workers = passer;
-		//(Optional)
-		//Make sure they can only have max of six workers using a while loop to check and see if it equals six and a scanner maybe?
 		
 		for(int i = 0; i < workers.size(); i++){	//Adding pay to array
 			hourlyWage.add(money);
@@ -67,7 +66,7 @@ public class Management{
 		currentEmployees.add(wrkr1);
 		currentEmployees.add(wrkr2);
 		}
-		
+		paidMoney = 0.00;
 	}
 	/**
 	 * This method tells you what employees are currently working.
@@ -173,12 +172,15 @@ public class Management{
 	}
 	
 	/**
-	 * shiftChange allows for the user to have the shift change and get new people in. 
-	 * This has no real value besides acting like your people get a break/chnaging out character names.
+	 * shiftChange allows for the user to have the shift change and get new people in and "pays" the old ones. 
+	 * This has no real value besides acting like your people get a break/changing out character names.
 	 */
 	public void shiftChange(){
 		String current1 = currentEmployees.get(0);
 		String current2 = currentEmployees.get(1);
+		Random numRan = new Random();
+		int randHours = numRan.nextInt(5) + 1; //Make sure to finish
+		paidMoney = paidMoney + ((ViewWages(current1) * randHours) + (ViewWages(current2) * randHours));
 		
 		Random rando = new Random();
 		boolean dupe = true;
@@ -199,10 +201,19 @@ public class Management{
 		}
 		
 	}
+	/**
+	 * A getter method that allows you to see all the employees
+	 * 
+	 * @return returns the ArrayList of workers.
+	 */
 	public ArrayList<String> getEmployees(){
 		return(workers);
 	}
-	
+	/**
+	 * A getter method that allows you to see all of the wages.
+	 * 
+	 * @return returns an ArrayList full of the wages.
+	 */
 	public ArrayList<Double> getWages(){
 		return(hourlyWage);
 	}
