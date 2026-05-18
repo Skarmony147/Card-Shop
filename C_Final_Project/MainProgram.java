@@ -530,7 +530,7 @@ public class MainProgram {
 			String name = workerNames.get(i);
 			Double wage = wages.get(i);
 			JPanel employeePanel = new JPanel(new GridLayout(1, 5));
-			JLabel nameLabel = new JLabel(name, SwingConstants.CENTER);
+			JLabel nameLabel = new JLabel(workerNames.get(i), SwingConstants.CENTER);
 			JLabel wageLabel = new JLabel(String.format("$%.2f", wage), SwingConstants.CENTER);
 			JButton fireButton = new JButton("Fire");
 			JButton promoteButton = new JButton("Promote");
@@ -557,7 +557,7 @@ public class MainProgram {
 						"They thought it'd be funny to insult me.",
 						"Arceus vs Babe Ruth vs Exodia vs Skullclamp didn't end well."};
 					final String reason = reasons[rando.nextInt(0, reasons.length)];
-					employees.Fire(name, reason);
+					employees.Fire(name , reason);
 					reasonLabel.setText(reason);
 					// When firing an employee, delete all the stuff for them and put hire button
 					employeePanel.remove(nameLabel);
@@ -578,7 +578,8 @@ public class MainProgram {
 						"Olivia", "Charlotte", "Emma", "Amelia", "Sophia",
 						"Mia", "Isabella", "Evelyn", "Sofia", "Eliana",
 					};
-					employees.Hire(names[rando.nextInt(0, names.length)], 14.50);
+					String newName = names[rando.nextInt(0, names.length)];
+					employees.Hire(newName, 14.50);
 					// Re add stuff from firing
 					employeePanel.remove(hireButton);
 					employeePanel.setLayout(new GridLayout(1, 5));
@@ -586,15 +587,16 @@ public class MainProgram {
 					employeePanel.add(wageLabel);
 					employeePanel.add(fireButton);
 					employeePanel.add(promoteButton);
+					nameLabel.setText(newName);
+					wageLabel.setText(String.format("$%.2f", wage));
 					employeePanel.repaint();
 				}
 			});
-			
 			// Promote button listener, increase pay by $0.50
 			promoteButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					double newWage = Double.parseDouble(wageLabel.getText().replace("$", "")) + 0.50;
-					employees.ChangePay(workerNames.get(workerNames.indexOf(name)), newWage);
+					employees.ChangePay(workerNames.get(workerNames.indexOf(nameLabel.getText())), newWage);
 					wageLabel.setText(String.format("$%.2f", newWage));
 				}
 			});
