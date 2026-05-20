@@ -557,7 +557,7 @@ public class MainProgram {
 						"They thought it'd be funny to insult me.",
 						"Arceus vs Babe Ruth vs Exodia vs Skullclamp didn't end well."};
 					final String reason = reasons[rando.nextInt(0, reasons.length)];
-					employees.Fire(name , reason);
+					employees.Fire(nameLabel.getText(), reason);
 					reasonLabel.setText(reason);
 					// When firing an employee, delete all the stuff for them and put hire button
 					employeePanel.remove(nameLabel);
@@ -590,13 +590,19 @@ public class MainProgram {
 					nameLabel.setText(newName);
 					wageLabel.setText(String.format("$%.2f", wage));
 					employeePanel.repaint();
+					/*while(true){
+						try {
+							Thread.sleep(100);
+							System.out.println(workerNames + " " + employees.getEmployees());
+						} catch (InterruptedException ex) {}
+					}*/
 				}
 			});
 			// Promote button listener, increase pay by $0.50
 			promoteButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					double newWage = Double.parseDouble(wageLabel.getText().replace("$", "")) + 0.50;
-					employees.ChangePay(workerNames.get(workerNames.indexOf(nameLabel.getText())), newWage);
+					employees.ChangePay(workerNames.indexOf(nameLabel.getText())), newWage);
 					wageLabel.setText(String.format("$%.2f", newWage));
 				}
 			});
