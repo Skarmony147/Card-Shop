@@ -1,10 +1,18 @@
 import java.io.*;
+import java.util.*;
 
 public class Report{
 	
-	public static void Begin(double remainingFunds, String employeeData){
+	public static void Begin(double remainingFunds, String employeeData, double employeeMoney){
 		try{
+			Random rand = new Random();
+			int randNum = rand.nextInt(5) + 1;
 			PrintWriter printy = new PrintWriter("DailyReport.txt");
+			
+			remainingFunds = remainingFunds - employeeMoney;
+			System.out.println("Paid employees. Total amount: " + employeeMoney);
+			randNum = rand.nextInt(5) + 1;
+			
 			printy.printf("Your total amount in your business account is: $%.2f dollars\n", remainingFunds);
 			printy.printf(employeeData);
 			if(remainingFunds <= 0)
