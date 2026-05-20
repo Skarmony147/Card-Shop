@@ -178,9 +178,8 @@ public class Management{
 	public void shiftChange(){
 		String current1 = currentEmployees.get(0);
 		String current2 = currentEmployees.get(1);
-		Random numRan = new Random();
-		int randHours = numRan.nextInt(5) + 1; //Make sure to finish
-		paidMoney = paidMoney + ((ViewWages(current1) * randHours) + (ViewWages(current2) * randHours));
+		
+		PayEmployees();
 		
 		Random rando = new Random();
 		boolean dupe = true;
@@ -202,6 +201,21 @@ public class Management{
 		
 	}
 	/**
+	 * Pays the employees but is needed to be called when you call the report class.
+	 */
+	public void PayEmployees(){
+		String Curr1 = currentEmployees.get(0);
+		String Curr2 = currentEmployees.get(1);
+		Random numRan = new Random();
+		int randHours = numRan.nextInt(5) + 1;
+		paidMoney = paidMoney + ((ViewWages(Curr1) * randHours) + (ViewWages(Curr2) * randHours));
+		
+		
+		
+	}
+	
+	
+	/**
 	 * A getter method that allows you to see all the employees
 	 * 
 	 * @return returns the ArrayList of workers.
@@ -218,6 +232,15 @@ public class Management{
 		return(hourlyWage);
 	}
 	
+	
+	/**
+	 * A getter method that allows you to get the amount of money you are paying your employees after the shift change.
+	 * 
+	 * @return returns the monetary value needed for the end of the day report.
+	 */
+	public double getPaidMoney(){
+		return(paidMoney);
+	}
 	/**
 	 * overrides the basic toString method and instead displays all of the workers you currently have hired and how much they are getting paid.
 	 */
