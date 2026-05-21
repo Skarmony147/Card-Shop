@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 public class Management{
 	
 	private ArrayList<String> workers = new ArrayList<String>();	//This array is all your possible workers workin gat your store
@@ -120,8 +119,6 @@ public class Management{
 			System.out.println("You have too many workers than this shop can contain/pay!");
 		
 	}
-	
-	
 	
 	/**
 	 * This method allows the user to change the pay of an employee you have hired.
