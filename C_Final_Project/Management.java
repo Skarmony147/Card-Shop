@@ -179,8 +179,6 @@ public class Management{
 		String current1 = currentEmployees.get(0);
 		String current2 = currentEmployees.get(1);
 		
-		PayEmployees();
-		
 		Random rando = new Random();
 		boolean dupe = true;
 		while(dupe){
