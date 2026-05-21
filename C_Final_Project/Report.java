@@ -1,44 +1,60 @@
-import java.io.*;
-import java.util.*;
+/**
+ * This class tallies up the action done in the app and gives an 
+ * end of day report about profit or losses.
+ **/
+
+import java.io.*; // For writing to file
+import java.util.*; // For reading from file and arraylists
 
 public class Report{
+	private double funds = 500.00; // Double holding funds
+	private ArrayList<String> actions = new ArrayList<String>(); // Arraylist holding what actions have been done
+	private ArrayList<Double> actionCost = new ArrayList<Double>(); // Arraylist holding the cost of each action
 	
 	/**
-	 * This method begins the daily report creation and allows the user to see what was accomplished in a "day".
-	 * It is also a static method allowing you to use it anytime without the need of an instance of it.
-	 */
-	public static void Begin(double remainingFunds, String employeeData, double employeeMoney){
-		try{
-			Random rand = new Random();
-			int randNum = rand.nextInt(5) + 1;
-			PrintWriter printy = new PrintWriter("DailyReport.txt");
-			
-			remainingFunds = remainingFunds - employeeMoney;
-			System.out.println("Paid employees. Total amount: " + employeeMoney);
-			randNum = rand.nextInt(5) + 1;
-			
-			printy.printf("Your total amount in your business account is: $%.2f dollars\n", remainingFunds);
-			printy.printf(employeeData);
-			if(remainingFunds <= 0)
-				printy.println("Please ensure you are making profit, this cannot happen again.");
-			else if(remainingFunds < 100)
-				printy.println("You are doing all right. Keep it up!");
-			else if(remainingFunds < 500)
-				printy.println("Very very nice manager. Please keep up this behavior to ensure you get more holidays!");
-			else
-				printy.println("Wow! Very good! Your store is going well. Superb job manager!");
-			
-			System.out.println("Please check your files for 'DailyReport.txt'");
-			printy.close();
-		}
-		
-		catch(Exception e){
-			System.out.println("There was an error with your daily report: " + e);
-		}
-		
+	 * Function to add an action done to the arraylists
+	 * 
+	 * @param action to take what action was done
+	 * @param cost to take how much action cost
+	 **/
+	public void addAction(String action, Double cost){
+		actions.add(action);
+		actionCost.add(cost);
 	}
 	
+	/**
+	 * Function to calculate remaining funds
+	 * 
+	 * @return remaining funds
+	 **/
+	public double remaining(){
+		double remain = funds;
+		for(double d : actionCost){
+			remain = remain + d;
+		}
+		return(remain);
+	}
 	
-	
-	
+	/**
+	 * Function to print out final report
+	 * 
+	 * @return String containing report
+	 **/
+	public String report(){
+		String total ="";
+		total = total + "At the beginning, you had $500.00 /n/n";
+		total = total + "You did these actions during the day: /n";
+		for(int i = 0; i < actions.size(); i++){
+			total = total + String.format("%s which resulted in %.2f /n", actions.get(i), actionCost.get(i));
+		}
+		total = total + String.format("/nNow, your remaining funds are %.2f /n", remaining());
+		if (funds > remaining()){
+			total = total + "You lost money. Better luck next time!";
+		} else if (funds == remaining()){
+			total = total + "You either did nothing or bough and sold the same amount.";
+		} else {
+			total = total + "Woohoo! Profit!";
+		}
+		return(total);
+	}
 }
