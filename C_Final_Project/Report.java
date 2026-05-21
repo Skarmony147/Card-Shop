@@ -3,6 +3,10 @@ import java.util.*;
 
 public class Report{
 	
+	/**
+	 * This method begins the daily report creation and allows the user to see what was accomplished in a "day".
+	 * It is also a static method allowing you to use it anytime without the need of an instance of it.
+	 */
 	public static void Begin(double remainingFunds, String employeeData, double employeeMoney){
 		try{
 			Random rand = new Random();
