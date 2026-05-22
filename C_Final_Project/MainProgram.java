@@ -602,7 +602,7 @@ public class MainProgram {
 			promoteButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					double newWage = Double.parseDouble(wageLabel.getText().replace("$", "")) + 0.50;
-					employees.ChangePay(workerNames.indexOf(nameLabel.getText())), newWage);
+					employees.ChangePay(nameLabel.getText(), newWage);
 					wageLabel.setText(String.format("$%.2f", newWage));
 				}
 			});
