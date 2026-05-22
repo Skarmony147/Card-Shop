@@ -1,10 +1,10 @@
 Man 48
 Milanie 42
+Man 41
 Driver 39
 Driver 35
 Man 34
 Clerker 31
+Clerker 31
 Driver 30
 Clerker 30
-Driver 29
-Driver 29
