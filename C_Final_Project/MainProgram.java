@@ -20,7 +20,10 @@ public class MainProgram {
 	private static Random rando = new Random(); // For "certain things".
 	private static String rank; // Rank of user
 	private static String currentUsername = "Player"; // username of user used for snake leaderboard
-	private static double funds = 500; // Total cash 
+	private static Report report = new Report(); // Report object to hold actions of the day
+	private static Management employees = new Management(); // Create management object for employ window
+	private static Stocks inventory = new Stocks(); // Create stocks object for stock window
+	
 	public static void login(){
 		// Create login window and properties
 		JFrame logWin = new JFrame("Login");
@@ -89,17 +92,17 @@ public class MainProgram {
 		// Create menu window and properties
 		JFrame menuWin = new JFrame("Menu");
 		menuWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		menuWin.setSize(200, 200);
+		menuWin.setSize(200, 220);
 		menuWin.setLayout(new BorderLayout());
 		menuWin.setResizable(false);
 		JPanel menuPanel = new JPanel();
 		menuPanel.setLayout(new GridLayout(5,1));
 		
 		// Funds label
-		JLabel menuFunds = new JLabel(String.format("Current funds: $%.2f", funds), SwingConstants.CENTER);
+		JLabel menuFunds = new JLabel(String.format("Current funds: $%.2f", report.remaining()), SwingConstants.CENTER);
 		menuPanel.add(menuFunds); 
 
-		// Declare buttons outside the if/else blocks - it's a suprise tool that will help us later
+		// Declare buttons outside the if/else blocks   it's a suprise tool that we'll use later
 		JButton snakeButton = null;
 		JButton stockButton = null;
 		JButton employButton = null;
@@ -128,7 +131,7 @@ public class MainProgram {
 			menuPanel.add(employees);
 		}
 
-		// Add listeners only if the button exists - let's use that suprise tool
+		// Add listeners only if the button exists
 		if (snakeButton != null) {
 			snakeButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -157,19 +160,26 @@ public class MainProgram {
 		// Receipt button
 		JButton endOfDay = new JButton("Receipt");
 		menuPanel.add(endOfDay);
+		
+		// Receipt listener
+		endOfDay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuWin.dispose();
+				receipt();
+			}
+		});
 
 		// Add panel to window, center, and show
 		menuWin.add(menuPanel, BorderLayout.CENTER);
 		menuWin.setLocationRelativeTo(null);
 		menuWin.setVisible(true);
 	}
+	
 	/**
 	 * Stock window function for buying and selling stock, 
 	 * viewing current prices, and current funds.
 	 **/
 	public static void stock(){
-		// Create stocks object for references
-		Stocks inventory = new Stocks();
 		// Create stock window and properties
 		JFrame stockWin = new JFrame("Stocks");
 		stockWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -200,6 +210,10 @@ public class MainProgram {
 		labelPanel.add(buySellLabel);
 		labelPanel.add(placeholder);
 		stockWin.add(labelPanel, BorderLayout.CENTER);
+		// Bottom row output thing, funds, menu button
+		JPanel lowStocks = new JPanel(new GridLayout(1, 2));
+		JLabel stockFunds = new JLabel(String.format("Funds: $%.2f", report.remaining()), SwingConstants.CENTER);
+		JButton stockBackButton = new JButton("Menu");
 		// Iterate through stockNames making panel and components for each stock
 		for (int i = 0; i < stockNames.size(); i++) {
 			final int stockIndex = i; // Get the index for use in the buy/sell listeners
@@ -224,12 +238,20 @@ public class MainProgram {
 				public void actionPerformed(ActionEvent e) {
 					inventory.buyStock(name,1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
+					report.addAction(String.format("Bought box %s for $%.2f", 
+						boxLabel.getText(), Double.parseDouble(priceLabel.getText().replace("$", ""))), 
+						-Double.parseDouble(priceLabel.getText().replace("$", "")));
+					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
 				}
 			});
 			sellButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					inventory.sellStock(name,(String)boxDrop.getSelectedItem(),1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
+					report.addAction(String.format("Sold box %s for $%.2f", 
+						boxLabel.getText(), Double.parseDouble(priceLabel.getText().replace("$", ""))), 
+						Double.parseDouble(priceLabel.getText().replace("$", "")));
+					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
 				}
 			});
 			// Add stuff to panel
@@ -243,10 +265,7 @@ public class MainProgram {
 			// Add panel to window
 			stockWin.add(stockPanel, BorderLayout.CENTER);
 		}
-		// Bottom row output thing, funds, menu button
-		JPanel lowStocks = new JPanel(new GridLayout(1, 2));
-		JLabel stockFunds = new JLabel(String.format("Funds: $%.2f", funds), SwingConstants.CENTER);
-		JButton stockBackButton = new JButton("Menu");
+		// Add bottom row to window after everything else
 		lowStocks.add(stockFunds);
 		lowStocks.add(stockBackButton);
 		stockWin.add(lowStocks);
@@ -511,8 +530,6 @@ public class MainProgram {
 	 * Employment window for firing, hiring, and promoting employees.
 	 **/
 	public static void employ(){
-		// Create management object for references
-		Management employees = new Management();
 		// Create employment window and properties
 		JFrame employWin = new JFrame("Employees");
 		employWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -523,8 +540,10 @@ public class MainProgram {
 		JLabel reasonLabel = new JLabel(("[Output]"), SwingConstants.CENTER);
 		JButton employBackButton = new JButton("Menu");
 		// Create employee lists for iteration creation of panels and such
-		ArrayList<String> workerNames = new ArrayList<String>(employees.getEmployees());
-		ArrayList<Double> wages = new ArrayList<Double>(employees.getWages());
+		ArrayList<String> workerNames = new ArrayList<String>();
+		ArrayList<Double> wages = new ArrayList<Double>();
+		workerNames = employees.getEmployees();
+		wages = employees.getWages();
 		// Iterate through names making panels and components for each name
 		for (int i = 0; i < workerNames.size(); i++) {
 			String name = workerNames.get(i);
@@ -590,12 +609,6 @@ public class MainProgram {
 					nameLabel.setText(newName);
 					wageLabel.setText(String.format("$%.2f", wage));
 					employeePanel.repaint();
-					/*while(true){
-						try {
-							Thread.sleep(100);
-							System.out.println(workerNames + " " + employees.getEmployees());
-						} catch (InterruptedException ex) {}
-					}*/
 				}
 			});
 			// Promote button listener, increase pay by $0.50
@@ -629,6 +642,32 @@ public class MainProgram {
 		// Display window
 		employWin.setLocationRelativeTo(null);
 		employWin.setVisible(true);
+	}
+	
+	/**
+	 * Receipt of all the actions done and the result funds for the day;
+	 * End of app
+	 **/
+	public static void receipt(){
+		// Create receipt window and properties
+		JFrame endWin = new JFrame("Login");
+		endWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		endWin.setSize(300, 400);
+		endWin.setLayout(new BorderLayout());
+		endWin.setResizable(false);
+		// Create panel with flow layout
+		JPanel finalPanel = new JPanel();
+		finalPanel.setLayout(new BorderLayout());
+		// Create labels, text fields, and button for username and password
+		JLabel reportLabel = new JLabel(report.report()); // Intensity intensifies
+		JButton endButton = new JButton("End day");
+		// Add components to the panel
+		finalPanel.add(reportLabel, BorderLayout.CENTER);
+		finalPanel.add(endButton, BorderLayout.SOUTH);
+		// Add panel window, center window, display window
+		endWin.add(finalPanel, BorderLayout.CENTER);
+		endWin.setLocationRelativeTo(null);
+		endWin.setVisible(true);
 	}
 
 	/**
