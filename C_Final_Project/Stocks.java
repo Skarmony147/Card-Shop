@@ -27,7 +27,7 @@ public class Stocks {
 		prices.put("Boost box", 150);
 		prices.put("UPC", 130);
 		
-		totalProfit = 0;
+		totalProfit = 5000;
 	}
 	
 	
@@ -50,6 +50,33 @@ public class Stocks {
 		else
 			System.out.println("There was an error with your selected card brand and the purchase did not go through. Please ensure spelling is correct.");
 	}
+	
+	/* This is more appropriate of a function to buy, but under time restraints the other one was better.
+	 * 
+	 * public void buyStock(String cardBrand, String boxType,  int amount){
+		boolean notFound = true;
+		for(int i = 0; i < 4; i++){
+			if(cards.get(i).equals(cardBrand)){
+				notFound = false;
+				cardInven.set(i, cardInven.get(i) + amount);
+				//This gets the pricing for the totalAmount variable to update correctly.
+				if(boxType.equals("ETB"))
+					totalProfit = totalProfit - (amount * prices.get(boxType));
+				else if(boxType.equals("UPC"))
+					totalProfit = totalProfit - (amount * prices.get(boxType));
+				else if(boxType.equals("Boost bundle"))
+					totalProfit = totalProfit - (amount * prices.get(boxType));
+				else if(boxType.equals("Boost box"))
+					totalProfit = totalProfit - (amount * prices.get(boxType));
+				else
+					System.out.println("Please ensure the name of your brand is spelt correctly!");
+			}
+		}
+		if(notFound)
+			System.out.println("There was an error with your selected card brand and the purchase did not go through. Please ensure spelling is correct.");
+	}*/
+	
+	
 	/**
 	 * This method allows the user to view current stock for a specific card brand
 	 * 
@@ -65,7 +92,7 @@ public class Stocks {
 		else if(cards.get(3).equals(cardType))
 			return(cardInven.get(3));	
 		else{
-			System.out.println("There was an error with your selected card brand and it could not be found. Please ensure spelling is correct."); //Maybe turn this print statement to a window opening
+			//System.out.println("There was an error with your selected card brand and it could not be found. Please ensure spelling is correct."); //Maybe turn this print statement to a window opening
 			return(-1);	//Thinking of an idea that uses this -1 as a sentinal value and just does nothing if this is there
 		}
 	}
@@ -113,24 +140,40 @@ public class Stocks {
 			System.out.println("Please input a number that is above zero");
 			return(-1);	//possibly can use this as a sentinal value too.
 		}
+		else if(cardInven.get(brand) == 0){
+			System.out.print("The item you selected is out of stock. Please buy more cards to sell!");
+			return(-1);
+		}
 		else if(littleStock){
-			System.out.println("We don't have the exact amount that you requested, but you can sell what is currently available.");
+			//System.out.println("We don't have the exact amount that you requested, but you can sell what is currently available.");
 			totalProfit = totalProfit + (prices.get(boxType) * cardInven.get(brand));
 			cardInven.set(brand, 0);
 			return(cardInven.get(brand));
 		}
 		else{
-			System.out.println("The amount requested is in stock and can be sold");
+			//System.out.println("The amount requested is in stock and can be sold");
 			totalProfit = totalProfit + (prices.get(boxType) * amount);
 			cardInven.set(brand, (cardInven.get(brand) - amount));
 			return(amount);
 		}
 	}
+	
+	/**
+	 * This method allows you to see the total amount of money that your account currently has.
+	 * This is also used in the Report.java class to print out what your balance looks like.
+	 * 
+	 * @return returns current status of your account's value.
+	 */
 	public double getProfits(){
 		return(totalProfit);
 	}
 	
+	/**
+	 * This toString method hijacks the basic one included with java and allows you to see your card amounts and brands.
+	 * 
+	 * @return returns a string of the current brands and stocks for each.
+	 */
 	public String toString(){
-		return("Current items in stock are:\n" + cards + "\nCurrent amounts are:\n" + cardInven + "\n");
+		return("Current items in stock are:\n" + cards + "\nCurrent amounts are:\n" + cardInven);
 	}
 }
