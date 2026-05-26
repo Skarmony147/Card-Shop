@@ -42,19 +42,20 @@ public class Report{
 	 **/
 	public String report(){
 		String total ="";
-		total = total + "At the beginning, you had $500.00 /n/n";
-		total = total + "You did these actions during the day: /n";
+		total = total + String.format("At the beginning, you had $500.00 /n/n");
+		total = total + String.format("You did these actions during the day: /n");
 		for(int i = 0; i < actions.size(); i++){
 			total = total + String.format("%s which resulted in %.2f /n", actions.get(i), actionCost.get(i));
 		}
 		total = total + String.format("/nNow, your remaining funds are %.2f /n", remaining());
 		if (funds > remaining()){
-			total = total + "You lost money. Better luck next time!";
+			total = total + String.format("You lost money. Better luck next time!");
 		} else if (funds == remaining()){
-			total = total + "You either did nothing or bought and sold the same amount.";
+			total = total + String.format("You either did nothing or bought and sold the same amount.");
 		} else {
-			total = total + "Woohoo! You made profit!";
+			total = total + String.format("Woohoo! You made profit!");
 		}
+		
 		return(total);
 	}
 }
