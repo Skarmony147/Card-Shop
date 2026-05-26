@@ -20,9 +20,9 @@ public class MainProgram {
 	private static Random rando = new Random(); // For "certain things".
 	private static String rank; // Rank of user
 	private static String currentUsername = "Player"; // username of user used for snake leaderboard
-	private static Report report = new Report(); // Report object to hold actions of the day
 	private static Management employees = new Management(); // Create management object for employ window
 	private static Stocks inventory = new Stocks(); // Create stocks object for stock window
+	private static Report report = new Report(); // Report object to hold actions of the day
 	
 	public static void login(){
 		// Create login window and properties
@@ -242,6 +242,7 @@ public class MainProgram {
 						boxLabel.getText(), Double.parseDouble(priceLabel.getText().replace("$", ""))), 
 						-Double.parseDouble(priceLabel.getText().replace("$", "")));
 					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
+					report.addAction("Bought " + nameLabel.getText() + " stock.", -Double.parseDouble(priceLabel.getText().replace("$", "")));
 				}
 			});
 			sellButton.addActionListener(new ActionListener() {
@@ -252,6 +253,7 @@ public class MainProgram {
 						boxLabel.getText(), Double.parseDouble(priceLabel.getText().replace("$", ""))), 
 						Double.parseDouble(priceLabel.getText().replace("$", "")));
 					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
+					report.addAction("Sold " + nameLabel.getText() + " stock.", Double.parseDouble(priceLabel.getText().replace("$", "")));
 				}
 			});
 			// Add stuff to panel
@@ -453,6 +455,7 @@ public class MainProgram {
 				timerDelay[0] = 200; // Reset speed
 				timer[0].setDelay(timerDelay[0]);
 				timer[0].start();
+				report.addAction("Played snake.", -0.50);
 			}
 		});
 		
@@ -574,7 +577,8 @@ public class MainProgram {
 						"They spent their christmas with their family and not us.",
 						"They won against me in chess.",
 						"They thought it'd be funny to insult me.",
-						"Arceus vs Babe Ruth vs Exodia vs Skullclamp didn't end well."};
+						"Arceus vs Babe Ruth vs Exodia vs Skullclamp didn't end well.",
+						"They looked tired on the job."};
 					final String reason = reasons[rando.nextInt(0, reasons.length)];
 					employees.Fire(nameLabel.getText(), reason);
 					reasonLabel.setText(reason);
