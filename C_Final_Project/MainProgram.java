@@ -238,9 +238,6 @@ public class MainProgram {
 				public void actionPerformed(ActionEvent e) {
 					inventory.buyStock(name,1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
-					report.addAction(String.format("Bought box %s for $%.2f", 
-						boxLabel.getText(), Double.parseDouble(priceLabel.getText().replace("$", ""))), 
-						-Double.parseDouble(priceLabel.getText().replace("$", "")));
 					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
 					report.addAction("Bought " + nameLabel.getText() + " stock.", -Double.parseDouble(priceLabel.getText().replace("$", "")));
 				}
@@ -249,9 +246,6 @@ public class MainProgram {
 				public void actionPerformed(ActionEvent e) {
 					inventory.sellStock(name,(String)boxDrop.getSelectedItem(),1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
-					report.addAction(String.format("Sold box %s for $%.2f", 
-						boxLabel.getText(), Double.parseDouble(priceLabel.getText().replace("$", ""))), 
-						Double.parseDouble(priceLabel.getText().replace("$", "")));
 					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
 					report.addAction("Sold " + nameLabel.getText() + " stock.", Double.parseDouble(priceLabel.getText().replace("$", "")));
 				}
@@ -662,11 +656,24 @@ public class MainProgram {
 		// Create panel with flow layout
 		JPanel finalPanel = new JPanel();
 		finalPanel.setLayout(new BorderLayout());
-		// Create labels, text fields, and button for username and password
-		JLabel reportLabel = new JLabel(report.report()); // Intensity intensifies
+		// Create report text and end button
+		JTextArea textPane = new JTextArea(report.report()); // Intensity intensifies
+		textPane.setEditable(false);
+		//Put the editor pane in a scroll pane.
+		JScrollPane textScrollPane = new JScrollPane(textPane);
+		textScrollPane.setVerticalScrollBarPolicy(
+		JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		textScrollPane.setPreferredSize(new Dimension(250, 145));
+		textScrollPane.setMinimumSize(new Dimension(10, 10));
+		// End button
 		JButton endButton = new JButton("End day");
+		endButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					endWin.dispose();
+				}
+			});
 		// Add components to the panel
-		finalPanel.add(reportLabel, BorderLayout.CENTER);
+		finalPanel.add(textScrollPane, BorderLayout.CENTER);
 		finalPanel.add(endButton, BorderLayout.SOUTH);
 		// Add panel window, center window, display window
 		endWin.add(finalPanel, BorderLayout.CENTER);
