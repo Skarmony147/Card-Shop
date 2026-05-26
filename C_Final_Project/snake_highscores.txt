@@ -1,10 +1,23 @@
-Man 48
-Milanie 42
-Driver 39
-Driver 35
-Man 34
-Man 34
-Skar and Ric 34
-Clerker 31
-Driver 30
-Clerker 30
+U Man
+P Mischief managed
+R Manager
+-
+U Clerker
+P MoneyTime
+R Employee
+-
+U Milanie
+P Eilrahc
+R Employee
+-
+U Driver
+P 300InSZ
+R Employee
+-
+U Newbert42
+P StarTrek4Life
+R Rookie
+-
+U Skar and Ric
+P F1atC4t
+R Manager
