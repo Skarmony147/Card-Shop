@@ -51,9 +51,9 @@ public class Report{
 		if (funds > remaining()){
 			total = total + "You lost money. Better luck next time!";
 		} else if (funds == remaining()){
-			total = total + "You either did nothing or bough and sold the same amount.";
+			total = total + "You either did nothing or bought and sold the same amount.";
 		} else {
-			total = total + "Woohoo! Profit!";
+			total = total + "Woohoo! You made profit!";
 		}
 		return(total);
 	}
