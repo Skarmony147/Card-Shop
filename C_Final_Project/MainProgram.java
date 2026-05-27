@@ -242,7 +242,7 @@ public class MainProgram {
 					inventory.buyStock(name,1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
 					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
-					report.addAction("Bought " + nameLabel.getText() + " stock.", -Double.parseDouble(priceLabel.getText().replace("$", "")));
+					report.addAction("Bought " + nameLabel.getText() + " stock", -Double.parseDouble(priceLabel.getText().replace("$", "")));
 				}
 			});
 			sellButton.addActionListener(new ActionListener() {
@@ -250,7 +250,7 @@ public class MainProgram {
 					inventory.sellStock(name,(String)boxDrop.getSelectedItem(),1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
 					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
-					report.addAction("Sold " + nameLabel.getText() + " stock.", Double.parseDouble(priceLabel.getText().replace("$", "")));
+					report.addAction("Sold " + nameLabel.getText() + " stock", Double.parseDouble(priceLabel.getText().replace("$", "")));
 				}
 			});
 			// Add stuff to panel
