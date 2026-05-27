@@ -7,7 +7,7 @@ import java.awt.*; // For swing graphics
 import java.awt.event.*; // For event listeners
 import java.util.*; // For array lists
 
-//For splash screen
+//For splash screen and misc
 import java.awt.image.*;
 import javax.sound.sampled.*;
 import java.io.*;
@@ -187,7 +187,10 @@ public class MainProgram {
 		stockWin.setLayout(new GridLayout(6,1));
 		stockWin.setResizable(false);
 		// Create list of stocks for iteration creation of panels and such
+		// try/catch didn't work so
+		@SuppressWarnings("unchecked")
 		ArrayList<String> stockNames = new ArrayList<String>((Collection<? extends String>) inventory.viewBrands());
+		@SuppressWarnings("unchecked")
 		ArrayList<Integer> stocks = new ArrayList<Integer>((Collection<? extends Integer>) inventory.viewStocks());
 		ArrayList<String> boxes = new ArrayList<String>();
 		String[] boxType = {"ETB", "Boost bundle", "Boost box", "UPC"};
