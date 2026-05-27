@@ -141,11 +141,11 @@ public class Stocks {
 			return(-1);	//possibly can use this as a sentinal value too.
 		}
 		else if(cardInven.get(brand) == 0){
-			System.out.print("The item you selected is out of stock. Please buy more cards to sell!");
+			System.out.println("The item you selected is out of stock. Please buy more cards to sell!");
 			return(-1);
 		}
 		else if(littleStock){
-			//System.out.println("We don't have the exact amount that you requested, but you can sell what is currently available.");
+			System.out.println("We don't have the exact amount that you requested, but you can sell what is currently available.");
 			totalProfit = totalProfit + (prices.get(boxType) * cardInven.get(brand));
 			cardInven.set(brand, 0);
 			return(cardInven.get(brand));
