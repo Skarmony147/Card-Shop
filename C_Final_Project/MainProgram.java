@@ -1,7 +1,3 @@
-/**
- * Main program for final project by Sebastian and Charlie
- **/
-
 import javax.swing.*; // For swing graphics
 import java.awt.*; // For swing graphics
 import java.awt.event.*; // For event listeners
@@ -12,11 +8,11 @@ import java.awt.image.*;
 import javax.sound.sampled.*;
 import java.io.*;
 
-public class MainProgram {
-	/**
-	 * Login window function where user enters username and password,
-	 * which uses the LoginWindow class for the different operations.
-	 **/
+
+/**
+ * Main program for final project by Sebastian and Charlie
+ **/
+public class MainProgram{
 	private static Random rando = new Random(); // For "certain things".
 	private static String rank; // Rank of user
 	private static String currentUsername = "Player"; // username of user used for snake leaderboard
@@ -24,6 +20,10 @@ public class MainProgram {
 	private static Stocks inventory = new Stocks(); // Create stocks object for stock window
 	private static Report report = new Report(); // Report object to hold actions of the day
 	
+	/**
+	 * Login window function where user enters username and password,
+	 * which uses the LoginWindow class for the different operations.
+	 **/
 	public static void login(){
 		// Create login window and properties
 		JFrame logWin = new JFrame("Login");
@@ -242,7 +242,7 @@ public class MainProgram {
 					inventory.buyStock(name,1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
 					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
-					report.addAction("Bought " + nameLabel.getText() + " stock", -Double.parseDouble(priceLabel.getText().replace("$", "")));
+					report.addAction("Bought " + nameLabel.getText() + " stock.", -Double.parseDouble(priceLabel.getText().replace("$", "")));
 				}
 			});
 			sellButton.addActionListener(new ActionListener() {
@@ -250,7 +250,7 @@ public class MainProgram {
 					inventory.sellStock(name,(String)boxDrop.getSelectedItem(),1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
 					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
-					report.addAction("Sold " + nameLabel.getText() + " stock", Double.parseDouble(priceLabel.getText().replace("$", "")));
+					report.addAction("Sold " + nameLabel.getText() + " stock.", Double.parseDouble(priceLabel.getText().replace("$", "")));
 				}
 			});
 			// Add stuff to panel
@@ -788,12 +788,13 @@ public class MainProgram {
 	        Thread.sleep(DURATION + 100);
 	    } catch (InterruptedException ex) {}
 	}
-
-	/*
-	 * The main method that starts it all
+	/**
+	 * This method starts the whole program up and creates your brand new card shop!
 	 * 
-	 * @param args unused
-	 **/
+	 * @param String[] is here because of how the main method is created. It is like every other String[] method parameter.
+	 * @param args This is the same as the other one, it doesn't really do anything, its just there for the method creation
+	 * 
+	 */
     public static void main(String[] args) {
 		// For a minor extra, loading screen
 		// Had to look up how to do this
