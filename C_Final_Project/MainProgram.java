@@ -19,7 +19,23 @@ public class MainProgram{
 	private static Management employees = new Management(); // Create management object for employ window
 	private static Stocks inventory = new Stocks(); // Create stocks object for stock window
 	private static Report report = new Report(); // Report object to hold actions of the day
+	private static Clip snakeMusicClip = null; // Clip for snake music
+	private static final String SNAKE_HIGHSCORE_FILE = "snake_highscores.txt"; // Snake leaderboard
 	
+	/**
+	 * Plays the button sound effect
+	 */
+	public static void playButtonSound() {
+		try {
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("ButtonSound.wav"));
+			Clip buttonClip = AudioSystem.getClip();
+			buttonClip.open(audioIn);
+			buttonClip.start();
+		} catch (Exception e) {
+			System.out.println("Could not play button sound: " + e);
+		}
+	}
+
 	/**
 	 * Login window function where user enters username and password,
 	 * which uses the LoginWindow class for the different operations.
@@ -405,6 +421,7 @@ public class MainProgram{
 				} else {
 					// Stop game and show restart button
 					timer[0].stop();
+					stopSnakeMusic();
 					startButton.setText("Restart Game");
 					startButton.setVisible(true);
 					// Read, update, write highscores
@@ -453,6 +470,7 @@ public class MainProgram{
 				timer[0].setDelay(timerDelay[0]);
 				timer[0].start();
 				report.addAction("Played snake.", -0.50);
+				playLoopingSound("SnakeLoop.wav");
 			}
 		});
 		
@@ -460,6 +478,7 @@ public class MainProgram{
 		snakeBackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Close snake window and reset game, open menu
+				stopSnakeMusic();
 				snakeGame.reset();
 				snakeWin.dispose(); // Close snake window
         		menu(); // Open menu window
@@ -470,8 +489,8 @@ public class MainProgram{
 		startButton.setVisible(true);
 	}
 
-	private static final String SNAKE_HIGHSCORE_FILE = "snake_highscores.txt"; // Snake leaderboard
-
+	// Used to store a player's username and their score
+    // for snake game leaderboard
 	static class HighscoreEntry {
 		String username;
 		int score;
@@ -512,6 +531,31 @@ public class MainProgram{
 			}
 		} catch (Exception e) {
 			System.out.println("Could not write highscores: " + e);
+		}
+	}
+
+	/*
+	* Plays looping snake music
+	*/
+	private static void playLoopingSound(String filename) {
+		try {
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(filename));
+			snakeMusicClip = AudioSystem.getClip();
+			snakeMusicClip.open(audioIn);
+			snakeMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+		} catch (Exception e) {
+			System.out.println("Could not play sound: " + e);
+		}
+	}
+
+	/*
+	* Stops the snake music if it's playing
+	*/
+	private static void stopSnakeMusic() {
+		if (snakeMusicClip != null && snakeMusicClip.isRunning()) {
+			snakeMusicClip.stop();
+			snakeMusicClip.close();
+			snakeMusicClip = null;
 		}
 	}
 
