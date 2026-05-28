@@ -1,11 +1,10 @@
+import java.io.*; // For writing to file
+import java.util.*; // For reading from file and arraylists
+
 /**
  * This class tallies up the action done in the app and gives an 
  * end of day report about profit or losses.
  **/
-
-import java.io.*; // For writing to file
-import java.util.*; // For reading from file and arraylists
-
 public class Report{
 	private double funds = 500.00; // Double holding funds
 	private ArrayList<String> actions = new ArrayList<String>(); // Arraylist holding what actions have been done
