@@ -1,6 +1,9 @@
 //This file will allow both managers and employees to access current inventory and to buy and sell items based on clearance
 import java.util.*;
 
+/**
+ * This class holds all of the information for the current inventories of the card shop. It also stores all of the money that you make.
+ */
 public class Stocks {
 	
 	private ArrayList<String> cards = new ArrayList<String>();	//This sets up the list which tells the current cards brands in stock
@@ -81,6 +84,8 @@ public class Stocks {
 	 * This method allows the user to view current stock for a specific card brand
 	 * 
 	 * @param cardType takes in a string to find the current stock
+	 * 
+	 * @return returns an integer of the amount of stock for a current brand type.
 	 */	
 	public int viewStock(String cardType){
 		if(cards.get(0).equals(cardType))
@@ -100,6 +105,8 @@ public class Stocks {
 	 * This method allows the user to view the prices of a certain kind of product regardless of brand
 	 * 
 	 * @param boxType is needed for pulling the price from the prices map.
+	 * 
+	 * @return returns the current price of the box type for any of the brands available.
 	 */
 	public int viewPrice(String boxType){
 		if(prices.get(boxType) == null)
