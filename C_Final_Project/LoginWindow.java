@@ -5,6 +5,9 @@ import java.util.Scanner; // Needed for scanner
  * Handles authentication logic for the login system.
  */
 public class LoginWindow {
+    /**
+     * Its a variable that holds the rank of the current user.
+     */
     public String rank = ""; // Rank of the current user
 
     /**
@@ -39,6 +42,13 @@ public class LoginWindow {
         }
         return false;
     }
+    
+    
+    /**
+     * Checks to see what rank the user is to determine what features are available.
+     * 
+     * @return returns the rank of the user.
+     */
     public String getRank(){
         return(rank);
     }
