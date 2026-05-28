@@ -17,3 +17,7 @@ R Employee
 U Newbert42
 P StarTrek4Life
 R Rookie
+-
+U Skar and Ric
+P F1atC4t
+R Manager
