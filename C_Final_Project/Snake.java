@@ -6,7 +6,10 @@
 import java.awt.Point;      // For snake body and food positions
 import java.util.LinkedList; // For snake body
 import java.util.Random;       // For returning the body as a List
-
+/**
+ * This class is for the snake game that the workers or managers can play during their shifts at the card shop. 
+ * It holds everything for it and is a unique twist on the original.
+ */
 public class Snake {
     private LinkedList<Point> body; // List representing the snake's body, with the head at the front
     private Point food; // Current food position
