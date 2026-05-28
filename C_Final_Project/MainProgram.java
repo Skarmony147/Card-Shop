@@ -789,6 +789,11 @@ public class MainProgram {
 	    } catch (InterruptedException ex) {}
 	}
 
+	/*
+	 * The main method that starts it all
+	 * 
+	 * @param args unused
+	 **/
     public static void main(String[] args) {
 		// For a minor extra, loading screen
 		// Had to look up how to do this
