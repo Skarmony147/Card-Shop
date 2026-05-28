@@ -1,5 +1,8 @@
 import java.util.*;
 
+/**
+ * This class contains all the methods needed to run the card shop. It has many features like, hire/fire, changing pay, and making a custom shop with your own characters!
+ */
 public class Management{
 	
 	private ArrayList<String> workers = new ArrayList<String>();	//This array is all your possible workers workin gat your store
@@ -38,6 +41,8 @@ public class Management{
 		paidMoney = 0.00;
 	}
 	
+	
+	
 	/**
 	 * This is an overloaded constructor that allows you to customize your shop more than the basic one.
 	 * That includes custom worker names and custom pay
@@ -69,6 +74,8 @@ public class Management{
 	}
 	/**
 	 * This method tells you what employees are currently working.
+	 * 
+	 * @return returns the current employees working in the shop.
 	 */
 	public String inHouse(){
 		return("Current employees working are: " + currentEmployees.get(0) + " and " + currentEmployees.get(1));
@@ -92,6 +99,24 @@ public class Management{
 				System.out.printf("Fired %s. When questioned, the manager said, '%s'\n", employee, statement);
 				workers.remove(i);
 				hourlyWage.remove(i);
+				
+				/*if(currentEmployees.get(0).equals(workers.get(i))){
+					currentEmployees.remove(workers.get(i));
+					
+					Random ran = new Random();
+					boolean dupe = true;
+					
+					while(dupe){
+						String replacement = workers.get(ran.nextInt(workers.size()) + 1);
+						if(replacement.equalsIgnoreCase(currentEmployees.get(1)))
+							continue;
+						else{
+							System.out.println(replacement + " was brought in");
+							dupe = false;
+						}
+					}
+				}*/
+				
 				notFound = false;
 				break;	
 			}
@@ -119,6 +144,8 @@ public class Management{
 			System.out.println("You have too many workers than this shop can contain/pay!");
 		
 	}
+	
+	
 	
 	/**
 	 * This method allows the user to change the pay of an employee you have hired.
