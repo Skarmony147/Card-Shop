@@ -70,6 +70,7 @@ public class MainProgram{
 		LoginWindow log = new LoginWindow();
 		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				playButtonSound();
 				String username = userTextField.getText();
 				String password = passTextField.getText();
 				currentUsername = username;
@@ -151,6 +152,7 @@ public class MainProgram{
 		if (snakeButton != null) {
 			snakeButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					playButtonSound();
 					menuWin.dispose();
 					snake();
 				}
@@ -159,6 +161,7 @@ public class MainProgram{
 		if (stockButton != null) {
 			stockButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					playButtonSound();
 					menuWin.dispose();
 					stock();
 				}
@@ -167,6 +170,7 @@ public class MainProgram{
 		if (employButton != null) {
 			employButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					playButtonSound();
 					menuWin.dispose();
 					employ();
 				}
@@ -180,6 +184,7 @@ public class MainProgram{
 		// Receipt listener
 		endOfDay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				playButtonSound();
 				menuWin.dispose();
 				receipt();
 			}
@@ -255,6 +260,7 @@ public class MainProgram{
 			// Add action listeners for buy/sell buttons
 			buyButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					playButtonSound();
 					inventory.buyStock(name,1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
 					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
@@ -263,6 +269,7 @@ public class MainProgram{
 			});
 			sellButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					playButtonSound();
 					inventory.sellStock(name,(String)boxDrop.getSelectedItem(),1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
 					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
@@ -288,6 +295,7 @@ public class MainProgram{
 		// Back button listener
 		stockBackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				playButtonSound();
 				// Close stock window, open menu
 				stockWin.dispose(); // Close stock window
         		menu(); // Open menu window
@@ -462,6 +470,7 @@ public class MainProgram{
 		// Start/Restart button listener
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				playButtonSound();
 				// Reset game, hide button, focus panel, start timer
 				snakeGame.reset();
 				startButton.setVisible(false);
@@ -477,6 +486,7 @@ public class MainProgram{
 		// Back button listener
 		snakeBackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				playButtonSound();
 				// Close snake window and reset game, open menu
 				stopSnakeMusic();
 				snakeGame.reset();
@@ -601,6 +611,7 @@ public class MainProgram{
 			// Add action listeners for fire/promote buttons
 			fireButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					playButtonSound();
 					String[] reasons = {
 						"No comment.", 
 						"They had a criminal history.", 
@@ -636,6 +647,7 @@ public class MainProgram{
 			// Hire button listener
 			hireButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					playButtonSound();
 					String[] names = { // Ripped the names from google
 						"Liam", "Noah", "Oliver", "Theodore", "Henry",
 						"James", "Elijah", "Mateo", "Lucas", "William",
@@ -659,6 +671,7 @@ public class MainProgram{
 			// Promote button listener, increase pay by $0.50
 			promoteButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					playButtonSound();
 					double newWage = Double.parseDouble(wageLabel.getText().replace("$", "")) + 0.50;
 					employees.ChangePay(nameLabel.getText(), newWage);
 					wageLabel.setText(String.format("$%.2f", newWage));
@@ -678,6 +691,7 @@ public class MainProgram{
 		// Back button listener
 		employBackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				playButtonSound();
 				// Close management window, open menu
 				employWin.dispose(); // Close managment window
         		menu(); // Open menu window
@@ -716,6 +730,7 @@ public class MainProgram{
 		JButton endButton = new JButton("End day");
 		endButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					playButtonSound();
 					endWin.dispose();
 				}
 			});
