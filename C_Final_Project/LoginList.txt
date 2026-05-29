@@ -2,6 +2,10 @@ U Man
 P Mischief managed
 R Manager
 -
+U Skar and Ric
+P F1atC4t
+R Manager
+-
 U Clerker
 P MoneyTime
 R Employee
@@ -17,7 +21,3 @@ R Employee
 U Newbert42
 P StarTrek4Life
 R Rookie
--
-U Skar and Ric
-P F1atC4t
-R Manager
