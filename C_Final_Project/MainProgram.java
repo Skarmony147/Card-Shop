@@ -850,7 +850,7 @@ public class MainProgram{
 	/**
 	 * This method starts the whole program up and creates your brand new card shop!
 	 * 
-	 * @param args This is the same as the other one, it doesn't really do anything, its just there for the method creation
+	 * @param args takes in things from the terminal; In here it does nothing! 
 	 * 
 	 */
     public static void main(String[] args) {
