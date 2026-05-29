@@ -263,8 +263,8 @@ public class MainProgram{
 					playButtonSound();
 					inventory.buyStock(name,1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
-					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
 					report.addAction("Bought " + nameLabel.getText() + " stock.", -Double.parseDouble(priceLabel.getText().replace("$", "")));
+					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
 				}
 			});
 			sellButton.addActionListener(new ActionListener() {
@@ -272,8 +272,8 @@ public class MainProgram{
 					playButtonSound();
 					inventory.sellStock(name,(String)boxDrop.getSelectedItem(),1);
 					numLabel.setText(String.valueOf(inventory.viewStocks().get(stockIndex)));
-					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
 					report.addAction("Sold " + nameLabel.getText() + " stock.", Double.parseDouble(priceLabel.getText().replace("$", "")));
+					stockFunds.setText(String.format("Funds: $%.2f", report.remaining()));
 				}
 			});
 			// Add stuff to panel
@@ -849,7 +849,8 @@ public class MainProgram{
 	}
 	/**
 	 * This method starts the whole program up and creates your brand new card shop!
-	 * @param args takes in things from the terminal; In here it does nothing!
+	 * 
+	 * @param args This is the same as the other one, it doesn't really do anything, its just there for the method creation
 	 * 
 	 */
     public static void main(String[] args) {
