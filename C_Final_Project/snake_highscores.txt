@@ -6,5 +6,5 @@ Man 34
 Man 34
 Ric 34
 Clerker 31
+Ric 31
 Driver 30
-Clerker 30
