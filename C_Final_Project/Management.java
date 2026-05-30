@@ -9,7 +9,6 @@ public class Management{
 	private ArrayList<Double> hourlyWage = new ArrayList<Double>();	//This array is how much each of them gets paid
 	private ArrayList<String> currentEmployees = new ArrayList<String>();	//This array is which two of your workers are in rotation at the moment
 	private double paidMoney;
-	//may need an instance of the Report class here so I can print out everything to a file
 	
 	/**
 	 * This constructor sets up a basic card shop with a set amount of workers and money.
