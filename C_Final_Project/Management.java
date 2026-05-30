@@ -5,7 +5,7 @@ import java.util.*;
  */
 public class Management{
 	
-	private ArrayList<String> workers = new ArrayList<String>();	//This array is all your possible workers workin gat your store
+	private ArrayList<String> workers = new ArrayList<String>();	//This array is all your possible workers workin at your store
 	private ArrayList<Double> hourlyWage = new ArrayList<Double>();	//This array is how much each of them gets paid
 	private ArrayList<String> currentEmployees = new ArrayList<String>();	//This array is which two of your workers are in rotation at the moment
 	private double paidMoney;
