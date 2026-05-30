@@ -421,7 +421,7 @@ public class MainProgram{
 					gamePanel.repaint();
 
 					// If score increased, speed up the timer
-					// We often partkae in a modest amount of tomfoolery
+					// We often partake in a modest amount of tomfoolery
 					if (snakeGame.getScore() > oldScore) {
 						timerDelay[0] = Math.max(MIN_DELAY, timerDelay[0] - DELAY_DECREMENT);
 						timer[0].setDelay(timerDelay[0]);
