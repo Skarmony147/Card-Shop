@@ -54,31 +54,6 @@ public class Stocks {
 			System.out.println("There was an error with your selected card brand and the purchase did not go through. Please ensure spelling is correct.");
 	}
 	
-	/* This is more appropriate of a function to buy, but under time restraints the other one was better.
-	 * 
-	 * public void buyStock(String cardBrand, String boxType,  int amount){
-		boolean notFound = true;
-		for(int i = 0; i < 4; i++){
-			if(cards.get(i).equals(cardBrand)){
-				notFound = false;
-				cardInven.set(i, cardInven.get(i) + amount);
-				//This gets the pricing for the totalAmount variable to update correctly.
-				if(boxType.equals("ETB"))
-					totalProfit = totalProfit - (amount * prices.get(boxType));
-				else if(boxType.equals("UPC"))
-					totalProfit = totalProfit - (amount * prices.get(boxType));
-				else if(boxType.equals("Boost bundle"))
-					totalProfit = totalProfit - (amount * prices.get(boxType));
-				else if(boxType.equals("Boost box"))
-					totalProfit = totalProfit - (amount * prices.get(boxType));
-				else
-					System.out.println("Please ensure the name of your brand is spelt correctly!");
-			}
-		}
-		if(notFound)
-			System.out.println("There was an error with your selected card brand and the purchase did not go through. Please ensure spelling is correct.");
-	}*/
-	
 	
 	/**
 	 * This method allows the user to view current stock for a specific card brand
