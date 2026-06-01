@@ -421,7 +421,7 @@ public class MainProgram{
 					gamePanel.repaint();
 
 					// If score increased, speed up the timer
-					// We often partake in a modest amount of tomfoolery
+					// We often partkae in a modest amount of tomfoolery
 					if (snakeGame.getScore() > oldScore) {
 						timerDelay[0] = Math.max(MIN_DELAY, timerDelay[0] - DELAY_DECREMENT);
 						timer[0].setDelay(timerDelay[0]);
@@ -598,6 +598,12 @@ public class MainProgram{
 		ArrayList<Double> wages = new ArrayList<Double>();
 		workerNames = employees.getEmployees();
 		wages = employees.getWages();
+		while(workerNames.size()<4){
+			if(workerNames.size()<4){
+				workerNames.add("");
+				wages.add((double)0);
+			}
+		}
 		// Iterate through names making panels and components for each name
 		for (int i = 0; i < workerNames.size(); i++) {
 			String name = workerNames.get(i);
@@ -682,6 +688,16 @@ public class MainProgram{
 			employeePanel.add(wageLabel);
 			employeePanel.add(fireButton);
 			employeePanel.add(promoteButton);
+			// If no employee in the slot, delete all the stuff for them and put hire button
+			if(workerNames.get(i)==""){
+				employeePanel.remove(nameLabel);
+				employeePanel.remove(wageLabel);
+				employeePanel.remove(fireButton);
+				employeePanel.remove(promoteButton);
+				employeePanel.setLayout(new BorderLayout());
+				employeePanel.add(hireButton);
+				employeePanel.repaint();
+			}
 			// Add panel to window
 			employWin.add(employeePanel, BorderLayout.CENTER);
 		}
@@ -850,7 +866,7 @@ public class MainProgram{
 	/**
 	 * This method starts the whole program up and creates your brand new card shop!
 	 * 
-	 * @param args takes in things from the terminal; In here it does nothing! 
+	 * @param args This is the same as the other one, it doesn't really do anything, its just there for the method creation
 	 * 
 	 */
     public static void main(String[] args) {
